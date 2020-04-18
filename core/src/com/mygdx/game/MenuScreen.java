@@ -9,11 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class MenuScreen extends BaseScreen{
 
+    private Texture texture;
+
     @Override
     public void initialize() {
 
-//        BaseActor title = new BaseActor(0,0, mainStage);
-//        title.setAnim();
+
+
 
         TextButton startButton = new TextButton("Start", BaseGame.textButtonStyle);
 
@@ -67,7 +69,17 @@ public class MenuScreen extends BaseScreen{
             }
         });
 
-
+        uiTable.pad(10);
+        uiTable.add(startButton).colspan(1);
+        uiTable.row();
+        uiTable.pad(10);
+        uiTable.add(levelsButton);
+        uiTable.row();
+        uiTable.pad(10);
+        uiTable.add(settingsButton);
+        uiTable.row();
+        uiTable.pad(10);
+        uiTable.add(quitButton);
     }
 
     @Override
