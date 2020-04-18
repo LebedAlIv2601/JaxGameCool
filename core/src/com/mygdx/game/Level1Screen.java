@@ -15,7 +15,6 @@ public class Level1Screen extends BaseScreen {
     public void initialize() {
         jax = new Jax(20,20,mainStage);
 
-
         leftButton = new TextButton("<=", BaseGame.textButtonStyle);
         rightButton = new TextButton("=>", BaseGame.textButtonStyle);
         attackButton = new TextButton("=[==>", BaseGame.textButtonStyle);

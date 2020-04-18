@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 public class Jax extends BaseActor{
 
     private boolean at;
+    private boolean flip;
     private Animation<TextureRegion> walk;
     private Animation<TextureRegion> hit;
     private Animation<TextureRegion> jump;
@@ -24,6 +25,7 @@ public class Jax extends BaseActor{
         stand = loadAnimationFromFiles(MainGameValues.staying, 0.1f,true);
 
         at = false;
+        flip = false;
         setAcceleration(400);
         setMaxSpeed(100);
         setDeceleration(400);
@@ -33,13 +35,18 @@ public class Jax extends BaseActor{
     public void act(float dt) {
         super.act(dt);
         applyPhysics(dt);
+        if(velocityVec.x>0){
+            flip = false;
+        } else if (velocityVec.x<0){
+            flip = true;
+        }
 
         if(isHitting()){
-            setAnimation(hit);
+            setAnimation(hit, flip);
         } else if(isMoving()){
-            setAnimation(walk);
+            setAnimation(walk, flip);
         } else{
-            setAnimation(stand);
+            setAnimation(stand, flip);
         }
 
     }

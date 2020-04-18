@@ -24,13 +24,14 @@ public class BaseActor extends Group {
     protected Animation<TextureRegion> animation;
     private float elapsedTime;
     private boolean animationPaused;
-    private Vector2 velocityVec;
+    protected Vector2 velocityVec;
     private Vector2 accelerationVec;
     private float acceleration;
     private float maxSpeed;
     private float deceleration;
     private Polygon boundaryPolygon;
     private static Rectangle worldBounds;
+    private boolean flip;
     protected Texture texture;
 
     public BaseActor(float x, float y, Stage s){
@@ -86,13 +87,14 @@ public class BaseActor extends Group {
         Color c = getColor();
         batch.setColor(c.r,c.g,c.b,c.a);
         if(animation != null && isVisible()){
-            batch.draw(animation.getKeyFrame(elapsedTime), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+            batch.draw(animation.getKeyFrame(elapsedTime), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), (flip ? -1 : 1)*getScaleX(), getScaleY(), getRotation());
         }
         super.draw(batch, parentAlpha);
     }
 
-    public void setAnimation(Animation<TextureRegion> anim){
+    public void setAnimation(Animation<TextureRegion> anim, boolean fl){
         animation = anim;
+        flip = fl;
         TextureRegion tr = animation.getKeyFrame(0);
         float w = tr.getRegionWidth();
         float h = tr.getRegionHeight();
@@ -121,7 +123,7 @@ public class BaseActor extends Group {
         }
 
         if(animation == null){
-            setAnimation(anim);
+            setAnimation(anim, flip);
         }
         return anim;
     }
@@ -151,7 +153,7 @@ public class BaseActor extends Group {
         }
 
         if(animation == null){
-            setAnimation(anim);
+            setAnimation(anim, flip);
         }
         return anim;
     }
