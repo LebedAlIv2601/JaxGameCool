@@ -31,6 +31,7 @@ public class BaseActor extends Group {
     private float deceleration;
     private Polygon boundaryPolygon;
     private static Rectangle worldBounds;
+    protected Texture texture;
 
     public BaseActor(float x, float y, Stage s){
         super();
@@ -48,104 +49,110 @@ public class BaseActor extends Group {
         deceleration = 0;
     }
 
-    public void setAnimation(Animation<TextureRegion> anim){
-        animation = anim;
-        TextureRegion tr = animation.getKeyFrame(0);
-        float w = tr.getRegionWidth();
-        float h = tr.getRegionHeight();
-        setSize(w, h);
-        setOrigin(w/2, h/2);
-        if(boundaryPolygon == null){
-            setBoundaryRectangle();
-        }
-    }
-
-
-    public void setAnimationPaused(boolean pause){
-        animationPaused = pause;
-    }
-
-    public void act(float dt){
-        super.act(dt);
-
-        if(!animationPaused){
-            elapsedTime += dt;
-        }
-    }
-
-    public void draw(Batch batch, float parentAlpha){
-
-
-        Color c = getColor();
-        batch.setColor(c.r,c.g,c.b,c.a);
-        if(animation != null && isVisible()){
-            batch.draw(animation.getKeyFrame(elapsedTime), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-        }
-        super.draw(batch, parentAlpha);
-    }
-
-    public Animation<TextureRegion> loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop){
-        int fileCount = fileNames.length;
-        Array<TextureRegion> textureArray = new Array<TextureRegion>();
-
-        for(int i = 0; i< fileCount; i++){
-            String fileName = fileNames[i];
-            Texture texture = new Texture(Gdx.files.internal(fileName));
+    public void setAnim(Array<TextureRegion> array,String[] str) {
+        for (int i = 0; i < str.length; i++) {
+            texture = new Texture(str[i]);
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-            textureArray.add(new TextureRegion(texture));
+            array.add(new TextureRegion(texture));
         }
-        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
-        if(loop){
+    }
+    public void useAnim(float frameT,boolean loop,Array<TextureRegion> array){
+        Animation<TextureRegion> anim = new Animation<>(frameT, array);
+        if (loop)
             anim.setPlayMode(Animation.PlayMode.LOOP);
-        } else {
+        else
             anim.setPlayMode(Animation.PlayMode.NORMAL);
-        }
 
-        if(animation == null){
-            setAnimation(anim);
-        }
-        return anim;
+        animation = anim;
     }
 
-    public Animation<TextureRegion> loadAnimationFromSheet(String fileName, int rows, int cols, float frameDuration, boolean loop){
-        Texture texture = new Texture (Gdx.files.internal(fileName), true);
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        int frameWidth = texture.getWidth()/cols;
-        int frameHeight = texture.getHeight()/rows;
 
-        TextureRegion[][] temp = TextureRegion.split(texture, frameWidth, frameHeight);
 
-        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+//    public void setAnimationPaused(boolean pause){
+//        animationPaused = pause;
+//    }
+//
+//    public void act(float dt){
+//        super.act(dt);
+//
+//        if(!animationPaused){
+//            elapsedTime += dt;
+//        }
+//    }
+//
+//    public void draw(Batch batch, float parentAlpha){
+//
+//
+//        Color c = getColor();
+//        batch.setColor(c.r,c.g,c.b,c.a);
+//        if(animation != null && isVisible()){
+//            batch.draw(animation.getKeyFrame(elapsedTime), getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+//        }
+//        super.draw(batch, parentAlpha);
+//    }
 
-        for(int r = 0; r<rows; r++){
-            for(int c = 0; c<cols;c++){
-                textureArray.add(temp[r][c]);
-            }
-        }
-
-        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
-
-        if(loop){
-            anim.setPlayMode(Animation.PlayMode.LOOP);
-        } else {
-            anim.setPlayMode(Animation.PlayMode.NORMAL);
-        }
-
-        if(animation == null){
-            setAnimation(anim);
-        }
-        return anim;
-    }
-
-    public Animation<TextureRegion> loadTexture(String fileName){
-        String [] fileNames = new String[1];
-        fileNames[0] = fileName;
-        return loadAnimationFromFiles(fileNames, 1, true);
-    }
-
-    public boolean isAnimationFinished(){
-        return animation.isAnimationFinished(elapsedTime);
-    }
+//    public Animation<TextureRegion> loadAnimationFromFiles(String[] fileNames, float frameDuration, boolean loop){
+//        int fileCount = fileNames.length;
+//        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+//
+//        for(int i = 0; i< fileCount; i++){
+//            String fileName = fileNames[i];
+//            Texture texture = new Texture(Gdx.files.internal(fileName));
+//            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+//            textureArray.add(new TextureRegion(texture));
+//        }
+//        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
+//        if(loop){
+//            anim.setPlayMode(Animation.PlayMode.LOOP);
+//        } else {
+//            anim.setPlayMode(Animation.PlayMode.NORMAL);
+//        }
+//
+//        if(animation == null){
+//            setAnimation(anim);
+//        }
+//        return anim;
+//    }
+//
+//    public Animation<TextureRegion> loadAnimationFromSheet(String fileName, int rows, int cols, float frameDuration, boolean loop){
+//        Texture texture = new Texture (Gdx.files.internal(fileName), true);
+//        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+//        int frameWidth = texture.getWidth()/cols;
+//        int frameHeight = texture.getHeight()/rows;
+//
+//        TextureRegion[][] temp = TextureRegion.split(texture, frameWidth, frameHeight);
+//
+//        Array<TextureRegion> textureArray = new Array<TextureRegion>();
+//
+//        for(int r = 0; r<rows; r++){
+//            for(int c = 0; c<cols;c++){
+//                textureArray.add(temp[r][c]);
+//            }
+//        }
+//
+//        Animation<TextureRegion> anim = new Animation<TextureRegion>(frameDuration, textureArray);
+//
+//        if(loop){
+//            anim.setPlayMode(Animation.PlayMode.LOOP);
+//        } else {
+//            anim.setPlayMode(Animation.PlayMode.NORMAL);
+//        }
+//
+//        if(animation == null){
+//            setAnimation(anim);
+//        }
+//        return anim;
+//    }
+//
+//    public Animation<TextureRegion> loadTexture(String fileName){
+//        String [] fileNames = new String[1];
+//        fileNames[0] = fileName;
+//        return loadAnimationFromFiles(fileNames, 1, true);
+//    }
+//
+//    public boolean isAnimationFinished(){
+//        return animation.isAnimationFinished(elapsedTime);
+//    }
 
     public void setSpeed(float speed){
         if (velocityVec.len() == 0){
