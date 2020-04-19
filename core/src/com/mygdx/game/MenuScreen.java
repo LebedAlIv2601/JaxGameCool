@@ -80,6 +80,7 @@ public class MenuScreen extends BaseScreen{
         uiTable.row();
         uiTable.pad(10);
         uiTable.add(quitButton);
+
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,24 +16,35 @@ public class Level1Screen extends BaseScreen {
     private TextButton attackButton;
     @Override
     public void initialize() {
-        jax = new Jax(20,20,mainStage);
+        TilemapActor tma = new TilemapActor("Level1Map/Level1Map.tmx", mainStage);
+
+        for(MapObject obj : tma.getRectangleList("Solid")){
+            MapProperties props = obj.getProperties();
+            new Solid((float)props.get("x"), (float)props.get("y"), (float)props.get("width"), (float)props.get("height"), mainStage);
+        }
+
+        MapObject startPoint = tma.getRectangleList("start").get(0);
+        MapProperties startProps = startPoint.getProperties();
+        jax = new Jax((float)startProps.get("x"), (float)startProps.get("y"), mainStage);
+
+        TextButton jumpButton = new TextButton("jumpYEP", BaseGame.textButtonStyle);
+
+        jumpButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event e) {
+                if (!isTouchDownEvent(e)){
+                    return false;
+                }
+                if(jax.isOnSolid()){
+                    jax.jump();
+                }
+                return false;
+            }
+        });
 
         leftButton = new TextButton("<=", BaseGame.textButtonStyle);
         rightButton = new TextButton("=>", BaseGame.textButtonStyle);
         attackButton = new TextButton("=[==>", BaseGame.textButtonStyle);
-
-//        attackButton.addListener(
-//                new EventListener() {
-//                    @Override
-//                    public boolean handle(Event e) {
-//                        if (!Level1Screen.this.isTouchDownEvent(e)) {
-//                            return false;
-//                        }
-//                        jax.setHitting(true);
-//                        return true;
-//                    }
-//                }
-//        );
 
 
         uiTable.pad(10);
@@ -38,6 +52,7 @@ public class Level1Screen extends BaseScreen {
         uiTable.add(rightButton).bottom();
         uiTable.add().expandX().expandY();
         uiTable.add(attackButton).bottom();
+        uiTable.add(jumpButton).bottom();
 
     }
 
@@ -45,15 +60,30 @@ public class Level1Screen extends BaseScreen {
     public void update(float dt) {
 
         if(leftButton.isPressed()){
-            jax.accelerateAtAngle(180);
-        }
-        if(rightButton.isPressed()){
-            jax.accelerateAtAngle(0);
+            jax.addVelocityVec(-1);
+        } else if(rightButton.isPressed()){
+            jax.addVelocityVec(1);
+        }else {
+            jax.decelerateJax();
         }
         if(attackButton.isPressed()){
             jax.setHitting(true);
         } else {
             jax.setHitting(false);
+        }
+
+        for (BaseActor actor : BaseActor.getList(mainStage, "Solid")){
+            Solid solid = (Solid)actor;
+            if(jax.overlaps(solid) && solid.isEnabled()){
+                Vector2 offset = jax.preventOverlap(solid);
+                if(offset !=null){
+                    if(Math.abs(offset.x)>Math.abs(offset.y)){
+                        jax.velocityVec.x = 0;
+                    } else{
+                        jax.velocityVec.y = 0;
+                    }
+                }
+            }
         }
     }
 }
