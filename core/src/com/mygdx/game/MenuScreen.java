@@ -14,9 +14,6 @@ public class MenuScreen extends BaseScreen{
     @Override
     public void initialize() {
 
-
-
-
         TextButton startButton = new TextButton("Start", BaseGame.textButtonStyle);
 
         startButton.addListener(new EventListener() {
