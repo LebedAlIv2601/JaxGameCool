@@ -10,7 +10,7 @@ public class Fire extends BaseActor {
         super(x, y, s);
 
         loadTexture("Level1Map/fire.png");
-        damage = 0.1f;
+        damage = 1.1f;
     }
     public float getDamage(){
         return damage;

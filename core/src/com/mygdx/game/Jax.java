@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -25,21 +27,24 @@ public class Jax extends BaseActor{
     private float jumpSpeed;
     private float health;
     private BaseActor belowSensor;
+    private Sound bruh;
+    private boolean out;
 
 
 
     public Jax(float x, float y, Stage s){
         super(x,y,s);
-        walk = loadAnimationFromFiles(MainGameValues.texturesForWalk, 0.1f,true);
+        walk = loadAnimationFromFiles(MainGameValues.texturesForWalk, 0.05f,true);
         hit = loadAnimationFromFiles(MainGameValues.texturesForHit, 0.1f,true);
         jump = loadAnimationFromFiles(MainGameValues.texturesForJump, 0.1f,true);
         stand = loadAnimationFromFiles(MainGameValues.staying, 0.1f,true);
 
         at = false;
         flip = false;
-        maxHorizontalSpeed = 150;
-        walkAcceleration = 200;
-        walkDeceleration = 100;
+        out = false;
+        maxHorizontalSpeed = 250;
+        walkAcceleration = 400;
+        walkDeceleration = 400;
         gravity = 700;
         maxVerticalSpeed = 1000;
         jumpSpeed = 450;
@@ -51,6 +56,8 @@ public class Jax extends BaseActor{
         belowSensor.setSize(this.getWidth()-8,8);
         belowSensor.setBoundaryRectangle();
         belowSensor.setVisible(false);
+
+        bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
     }
 
     public void act(float dt) {
@@ -86,8 +93,16 @@ public class Jax extends BaseActor{
             setAnimation(jump, flip);
         }
         alignCamera();
-        boundToWorld();
 
+        if(getY() + getHealth()<0){
+            out = true;
+        }
+
+//        boundToWorld();
+//        if(health<=0){
+//            death();
+//            bruh.play();
+//        }
     }
 
     public void setHitting(boolean t){
@@ -142,5 +157,8 @@ public class Jax extends BaseActor{
     }
     public void setHealth(float d){
         health -= d;
+    }
+    public boolean isOut(){
+        return out;
     }
 }

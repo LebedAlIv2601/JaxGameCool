@@ -355,4 +355,9 @@ public class BaseActor extends Group {
 
         return Intersector.overlapConvexPolygons(poly1, poly2);
     }
+
+//    public void death(){
+//        setRotation(90);
+//        this.remove();
+//    }
 }

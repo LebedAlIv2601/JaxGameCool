@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,15 +9,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.compression.lzma.Base;
 
 import java.nio.channels.Pipe;
 
@@ -25,11 +30,13 @@ public class Level1Screen extends BaseScreen {
     private TextButton leftButton;
     private TextButton rightButton;
     private TextButton attackButton;
-    private Label healthNow;
     private ProgressBar healthBar;
+    private Label loseLabel;
     private ProgressBar.ProgressBarStyle pbs;
     private Pixmap pixmap;
     private TextureRegionDrawable drawable;
+    private Sound bruh;
+    private boolean flag;
     @Override
     public void initialize() {
         TilemapActor tma = new TilemapActor("Level1Map/Level1Map.tmx", mainStage);
@@ -47,8 +54,6 @@ public class Level1Screen extends BaseScreen {
         MapObject startPoint = tma.getRectangleList("start").get(0);
         MapProperties startProps = startPoint.getProperties();
         jax = new Jax((float)startProps.get("x"), (float)startProps.get("y"), mainStage);
-
-//        healthNow = new Label("Health: ", BaseGame.labelStyle);
 
         pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.RED);
@@ -76,6 +81,23 @@ public class Level1Screen extends BaseScreen {
         healthBar.setValue(1);
         healthBar.setAnimateDuration(0.25f);
 //        healthBar.setBounds(10,10,500,20);
+        Button.ButtonStyle buttonStyleRestart = new Button.ButtonStyle();
+        Texture buttonRestart = new Texture(Gdx.files.internal("restart.png"));
+        TextureRegion buttonRegionRestart = new TextureRegion(buttonRestart);
+        buttonStyleRestart.up = new TextureRegionDrawable(buttonRegionRestart);
+
+        Button restartButton = new Button(buttonStyleRestart);
+
+        restartButton.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event e) {
+                if (!isTouchDownEvent(e)){
+                    return false;
+                }
+                BaseGame.setActiveScreen(new Level1Screen());
+                return false;
+            }
+        });
 
         TextButton jumpButton = new TextButton("jumpYEP", BaseGame.textButtonStyle);
 
@@ -97,10 +119,12 @@ public class Level1Screen extends BaseScreen {
         attackButton = new TextButton("=[==>", BaseGame.textButtonStyle);
 
 
+
+
         uiTable.pad(10);
-//        uiTable.add(healthNow).top().colspan(2);
-//        uiTable.row();
         uiTable.add(healthBar).top().colspan(2);
+        uiTable.add().expandX().expandY();
+        uiTable.add(restartButton).top().right().colspan(2);
         uiTable.row();
         uiTable.add(leftButton).bottom();
         uiTable.add(rightButton).bottom();
@@ -108,10 +132,13 @@ public class Level1Screen extends BaseScreen {
         uiTable.add(attackButton).bottom();
         uiTable.add(jumpButton).bottom();
 
+        bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
+        flag = true;
+
     }
 
     @Override
-    public void update(float dt) {
+    public void update(float dt){
 
         if(leftButton.isPressed()){
             jax.addVelocityVec(-1);
@@ -147,6 +174,20 @@ public class Level1Screen extends BaseScreen {
                 healthBar.setValue(jax.getHealth()/MainGameValues.jaxHealth);
             }
         }
-//        healthNow.setText("Health: "+(int)jax.getHealth());
+
+        if(jax.getHealth()<=0 || jax.isOut()){
+            BaseActor loseMessage = new BaseActor(0, 0, uiStage);
+            loseMessage.loadTexture("loseMessage.png");
+            loseMessage.centerAtPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+            loseMessage.setOpacity(0);
+            loseMessage.addAction(Actions.delay(1));
+            loseMessage.addAction(Actions.after(Actions.fadeIn(1)));
+            if(flag) {
+                bruh.play();
+                flag = false;
+            }
+            jax.remove();
+        }
+
     }
 }
