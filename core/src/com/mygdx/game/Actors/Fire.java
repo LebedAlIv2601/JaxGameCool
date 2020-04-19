@@ -1,8 +1,7 @@
-package com.mygdx.game;
+package com.mygdx.game.Actors;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-import java.awt.PageAttributes;
+import com.mygdx.game.Actors.BaseActor;
 
 public class Fire extends BaseActor {
     private float damage;

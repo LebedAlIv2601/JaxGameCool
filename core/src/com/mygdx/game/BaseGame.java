@@ -7,15 +7,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.mygdx.game.Screens.BaseScreen;
 
 
 public abstract class BaseGame extends Game {
     private static BaseGame game;
     public static LabelStyle labelStyle;
     public static TextButtonStyle textButtonStyle;
+
 
     public BaseGame(){
         game = this;
@@ -33,6 +37,7 @@ public abstract class BaseGame extends Game {
         textButtonStyle.up = new NinePatchDrawable(buttonPath);
         textButtonStyle.font = new BitmapFont(Gdx.files.internal("cooper.fnt"));
         textButtonStyle.fontColor = Color.GOLD;
+
     }
 
     public static void setActiveScreen(BaseScreen s){

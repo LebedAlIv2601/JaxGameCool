@@ -1,7 +1,6 @@
-package com.mygdx.game;
+package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,15 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.compression.lzma.Base;
 
 import java.nio.channels.Pipe;
 
@@ -30,6 +26,7 @@ public class Level1Screen extends BaseScreen {
     private TextButton leftButton;
     private TextButton rightButton;
     private TextButton attackButton;
+    private Label healthNow;
     private ProgressBar healthBar;
     private Label loseLabel;
     private ProgressBar.ProgressBarStyle pbs;
@@ -171,7 +168,7 @@ public class Level1Screen extends BaseScreen {
             if(jax.overlaps(fireActor)){
                 Fire fire = (Fire)fireActor;
                 jax.setHealth(fire.getDamage());
-                healthBar.setValue(jax.getHealth()/MainGameValues.jaxHealth);
+                healthBar.setValue(jax.getHealth()/ MainGameValues.jaxHealth);
             }
         }
 

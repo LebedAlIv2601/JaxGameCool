@@ -1,16 +1,17 @@
-package com.mygdx.game;
+package com.mygdx.game.Actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.Actors.BaseActor;
+import com.mygdx.game.Actors.Solid;
+import com.mygdx.game.MainGameValues;
 
-public class Jax extends BaseActor{
+public class Jax extends BaseActor {
 
     private boolean at;
     private boolean flip;

@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -24,7 +24,7 @@ public class BaseActor extends Group {
     protected Animation<TextureRegion> animation;
     private float elapsedTime;
     private boolean animationPaused;
-    protected Vector2 velocityVec;
+    public Vector2 velocityVec;
     protected Vector2 accelerationVec;
     private float acceleration;
     private float maxSpeed;
