@@ -9,4 +9,5 @@ public class MainGameValues {
     public static String[] texturesForWalk = {"1going.png","2going.png", "3going.png", "4going.png", "5going.png"};
     public static String[] texturesForJump = {"jump3.png"};
     public static String[] staying = {"Staying.png"};
+    public static float jaxHealth = 100;
 }

@@ -23,6 +23,7 @@ public class Jax extends BaseActor{
     private float gravity;
     private float deltaTime;
     private float jumpSpeed;
+    private float health;
     private BaseActor belowSensor;
 
 
@@ -42,6 +43,7 @@ public class Jax extends BaseActor{
         gravity = 700;
         maxVerticalSpeed = 1000;
         jumpSpeed = 450;
+        health = MainGameValues.jaxHealth;
 
         setBoundaryPolygon(8);
         belowSensor = new BaseActor(0,0,s);
@@ -60,6 +62,7 @@ public class Jax extends BaseActor{
 
         velocityVec.x = MathUtils.clamp(velocityVec.x, -maxHorizontalSpeed, maxHorizontalSpeed);
         velocityVec.y = MathUtils.clamp(velocityVec.y, -maxVerticalSpeed, maxVerticalSpeed);
+        health = MathUtils.clamp(health, 0, MainGameValues.jaxHealth);
         moveBy(velocityVec.x*dt, velocityVec.y*dt);
         accelerationVec.set(0,0);
 
@@ -134,6 +137,10 @@ public class Jax extends BaseActor{
         velocityVec.y = jumpSpeed;
     }
 
-
-
+    public float getHealth(){
+        return health;
+    }
+    public void setHealth(float d){
+        health -= d;
+    }
 }

@@ -49,26 +49,6 @@ public class BaseActor extends Group {
         maxSpeed = 1000;
         deceleration = 0;
     }
-
-//    public void setAnim(Array<TextureRegion> array,String[] str) {
-//        for (int i = 0; i < str.length; i++) {
-//            texture = new Texture(str[i]);
-//            texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-//            array.add(new TextureRegion(texture));
-//        }
-//    }
-//    public void useAnim(float frameT,boolean loop,Array<TextureRegion> array){
-//        Animation<TextureRegion> anim = new Animation<>(frameT, array);
-//        if (loop)
-//            anim.setPlayMode(Animation.PlayMode.LOOP);
-//        else
-//            anim.setPlayMode(Animation.PlayMode.NORMAL);
-//
-//        animation = anim;
-//    }
-
-
-
     public void setAnimationPaused(boolean pause){
         animationPaused = pause;
     }

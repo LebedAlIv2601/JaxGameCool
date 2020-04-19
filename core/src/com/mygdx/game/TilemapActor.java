@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -19,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class TilemapActor extends Actor {
-    public static int windowWidth = 800;
-    public static int windowHeight = 600;
+    public static int windowWidth = Gdx.graphics.getWidth();
+    public static int windowHeight = Gdx.graphics.getHeight();
 
     private TiledMap tiledMap;
     private OrthographicCamera tiledCamera;
