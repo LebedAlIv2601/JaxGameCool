@@ -13,22 +13,13 @@ import com.badlogic.gdx.utils.Array;
 public class Jax extends BaseActor{
 
     private boolean at;
-    private boolean flip;
     private Animation<TextureRegion> walk;
     private Animation<TextureRegion> hit;
     private Animation<TextureRegion> jump;
     private Animation<TextureRegion> stand;
-    private float walkAcceleration;
-    private float walkDeceleration;
-    private float maxHorizontalSpeed;
-    private float maxVerticalSpeed;
-    private float gravity;
-    private float deltaTime;
     private float jumpSpeed;
-    private float health;
     private BaseActor belowSensor;
-    private Sound bruh;
-    private boolean out;
+
 
 
 
@@ -41,14 +32,14 @@ public class Jax extends BaseActor{
 
         at = false;
         flip = false;
-        out = false;
         maxHorizontalSpeed = 250;
         walkAcceleration = 400;
         walkDeceleration = 400;
         gravity = 700;
         maxVerticalSpeed = 1000;
         jumpSpeed = 450;
-        health = MainGameValues.jaxHealth;
+        setHealth(MainGameValues.jaxHealth);
+        setDamage(5f);
 
         setBoundaryPolygon(8);
         belowSensor = new BaseActor(0,0,s);
@@ -57,28 +48,14 @@ public class Jax extends BaseActor{
         belowSensor.setBoundaryRectangle();
         belowSensor.setVisible(false);
 
-        bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
     }
 
     public void act(float dt) {
         super.act(dt);
-        deltaTime+=dt;
 
-        accelerationVec.add(0,-gravity);
-        velocityVec.add(accelerationVec.x*dt, accelerationVec.y*dt);
-
-        velocityVec.x = MathUtils.clamp(velocityVec.x, -maxHorizontalSpeed, maxHorizontalSpeed);
-        velocityVec.y = MathUtils.clamp(velocityVec.y, -maxVerticalSpeed, maxVerticalSpeed);
-        health = MathUtils.clamp(health, 0, MainGameValues.jaxHealth);
-        moveBy(velocityVec.x*dt, velocityVec.y*dt);
-        accelerationVec.set(0,0);
+        physicsApply(dt);
 
         belowSensor.setPosition(getX()+4,getY()-8);
-        if(velocityVec.x>0){
-            flip = false;
-        } else if (velocityVec.x<0){
-            flip = true;
-        }
         if(isHitting()){
             setAnimation(hit, flip);
         } else if(this.isOnSolid()){
@@ -94,45 +71,10 @@ public class Jax extends BaseActor{
         }
         alignCamera();
 
-        if(getY() + getHealth()<0){
-            out = true;
-        }
 
-//        boundToWorld();
-//        if(health<=0){
-//            death();
-//            bruh.play();
-//        }
     }
 
-    public void setHitting(boolean t){
-        at = t;
-    }
-    public boolean isHitting(){
-        return at;
-    }
-    public void addVelocityVec(float det){
-        accelerationVec.add(det*walkAcceleration, 0);
-    }
-    public void decelerateJax(){
-        float decelerationAmount = walkDeceleration*deltaTime;
 
-        float walkDirection;
-        if(velocityVec.x>0){
-            walkDirection = 1;
-        } else {
-            walkDirection = -1;
-        }
-
-        float walkSpeed = Math.abs(velocityVec.x);
-
-        walkSpeed-=decelerationAmount;
-
-        if (walkSpeed < 0){
-            walkSpeed=0;
-        }
-        velocityVec.x = walkSpeed *walkDirection;
-    }
 
     public boolean belowOverlaps(BaseActor actor){
         return belowSensor.overlaps(actor);
@@ -150,15 +92,5 @@ public class Jax extends BaseActor{
 
     public void jump(){
         velocityVec.y = jumpSpeed;
-    }
-
-    public float getHealth(){
-        return health;
-    }
-    public void setHealth(float d){
-        health -= d;
-    }
-    public boolean isOut(){
-        return out;
     }
 }
