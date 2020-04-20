@@ -1,6 +1,7 @@
 package com.mygdx.game.Actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,8 +32,21 @@ public class BaseActor extends Group {
     private float deceleration;
     private Polygon boundaryPolygon;
     private static Rectangle worldBounds;
-    private boolean flip;
+    protected boolean flip;
     protected Texture texture;
+    protected float walkAcceleration;
+    protected float walkDeceleration;
+    protected float maxHorizontalSpeed;
+    protected float maxVerticalSpeed;
+    protected float gravity;
+    protected float deltaTime;
+    protected float jumpSpeed;
+    protected float health;
+    protected float damage;
+    private boolean flag;
+    private Sound bruh;
+    private boolean out;
+    private boolean at;
 
     public BaseActor(float x, float y, Stage s){
         super();
@@ -48,6 +62,9 @@ public class BaseActor extends Group {
         acceleration= 0;
         maxSpeed = 1000;
         deceleration = 0;
+        out = false;
+        flag = true;
+        bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
     }
     public void setAnimationPaused(boolean pause){
         animationPaused = pause;
@@ -55,7 +72,7 @@ public class BaseActor extends Group {
 
     public void act(float dt){
         super.act(dt);
-
+        deltaTime+=dt;
         if(!animationPaused){
             elapsedTime += dt;
         }
@@ -356,8 +373,81 @@ public class BaseActor extends Group {
         return Intersector.overlapConvexPolygons(poly1, poly2);
     }
 
-//    public void death(){
-//        setRotation(90);
-//        this.remove();
-//    }
+    public void physicsApply(float dt){
+        accelerationVec.add(0,-gravity);
+        velocityVec.add(accelerationVec.x*dt, accelerationVec.y*dt);
+
+        velocityVec.x = MathUtils.clamp(velocityVec.x, -maxHorizontalSpeed, maxHorizontalSpeed);
+        velocityVec.y = MathUtils.clamp(velocityVec.y, -maxVerticalSpeed, maxVerticalSpeed);
+        moveBy(velocityVec.x*dt, velocityVec.y*dt);
+        accelerationVec.set(0,0);
+        if(velocityVec.x>0){
+            flip = false;
+        } else if (velocityVec.x<0){
+            flip = true;
+        }
+    }
+
+    public float getHealth(){
+        return health;
+    }
+    public void setHealth(float d){
+        health += d;
+    }
+
+    public void addVelocityVec(float det){
+        accelerationVec.add(det*walkAcceleration, 0);
+    }
+    public void decelerateActor(){
+        float decelerationAmount = walkDeceleration*deltaTime;
+
+        float walkDirection;
+        if(velocityVec.x>0){
+            walkDirection = 1;
+        } else {
+            walkDirection = -1;
+        }
+
+        float walkSpeed = Math.abs(velocityVec.x);
+
+        walkSpeed-=decelerationAmount;
+
+        if (walkSpeed < 0){
+            walkSpeed=0;
+        }
+        velocityVec.x = walkSpeed *walkDirection;
+    }
+
+    public float getDamage(){
+        return damage;
+    }
+    public void setDamage(float damag){
+        damage = -damag;
+    }
+
+    public void death(){
+        if(flag) {
+            bruh.play();
+            flag = false;
+        }
+        remove();
+    }
+
+    public boolean isOut(){
+        return out;
+    }
+
+    public void setOut(){
+        if(getY() + getHeight()<0){
+            out = true;
+        }
+    }
+
+    public void setHitting(boolean t){
+        at = t;
+    }
+    public boolean isHitting(){
+        return at;
+    }
+
 }

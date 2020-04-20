@@ -1,6 +1,8 @@
-package com.mygdx.game.Screens;
+package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -19,21 +23,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import java.nio.channels.Pipe;
 
 public class Level1Screen extends BaseScreen {
     private Jax jax;
     private TextButton leftButton;
     private TextButton rightButton;
     private TextButton attackButton;
-    private Label healthNow;
     private ProgressBar healthBar;
     private Label loseLabel;
     private ProgressBar.ProgressBarStyle pbs;
     private Pixmap pixmap;
     private TextureRegionDrawable drawable;
     private Sound bruh;
+    private Music ost;
     private boolean flag;
+    private float audioVolume;
     @Override
     public void initialize() {
         TilemapActor tma = new TilemapActor("Level1Map/Level1Map.tmx", mainStage);
@@ -43,14 +47,22 @@ public class Level1Screen extends BaseScreen {
             new Solid((float)props.get("x"), (float)props.get("y"), (float)props.get("width"), (float)props.get("height"), mainStage);
         }
 
+
+
         for(MapObject obj : tma.getTileList("Fire")){
             MapProperties props = obj.getProperties();
             new Fire((float)props.get("x"), (float)props.get("y"), mainStage);
         }
 
+        for(MapObject obj : tma.getRectangleList("StickEnemy")){
+            MapProperties props = obj.getProperties();
+            new StickEnemy((float)props.get("x"), (float)props.get("y"), mainStage);
+        }
+
         MapObject startPoint = tma.getRectangleList("start").get(0);
         MapProperties startProps = startPoint.getProperties();
         jax = new Jax((float)startProps.get("x"), (float)startProps.get("y"), mainStage);
+
 
         pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.RED);
@@ -92,6 +104,7 @@ public class Level1Screen extends BaseScreen {
                     return false;
                 }
                 BaseGame.setActiveScreen(new Level1Screen());
+                ost.dispose();
                 return false;
             }
         });
@@ -129,7 +142,13 @@ public class Level1Screen extends BaseScreen {
         uiTable.add(attackButton).bottom();
         uiTable.add(jumpButton).bottom();
 
+        audioVolume = 1;
+
         bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
+        ost = Gdx.audio.newMusic(Gdx.files.internal("ost.mp3"));
+        ost.setLooping(true);
+        ost.setVolume(audioVolume/3);
+        ost.play();
         flag = true;
 
     }
@@ -142,7 +161,7 @@ public class Level1Screen extends BaseScreen {
         } else if(rightButton.isPressed()){
             jax.addVelocityVec(1);
         }else {
-            jax.decelerateJax();
+            jax.decelerateActor();
         }
         if(attackButton.isPressed()){
             jax.setHitting(true);
@@ -150,41 +169,85 @@ public class Level1Screen extends BaseScreen {
             jax.setHitting(false);
         }
 
+        for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")) {
+            StickEnemy st =(StickEnemy) b;
+            allLogic(st);
+        }
+        allLogic(jax);
+        jaxHit();
+        findJax();
+        healthBar.setValue(jax.getHealth()/MainGameValues.jaxHealth);
+
+    }
+
+    public void onGround(BaseActor a){
         for (BaseActor actor : BaseActor.getList(mainStage, "Solid")){
             Solid solid = (Solid)actor;
-            if(jax.overlaps(solid) && solid.isEnabled()){
-                Vector2 offset = jax.preventOverlap(solid);
+            if(a.overlaps(solid) && solid.isEnabled()){
+                Vector2 offset = a.preventOverlap(solid);
                 if(offset !=null){
                     if(Math.abs(offset.x)>Math.abs(offset.y)){
-                        jax.velocityVec.x = 0;
+                        a.velocityVec.x = 0;
                     } else{
-                        jax.velocityVec.y = 0;
+                        a.velocityVec.y = 0;
                     }
                 }
             }
         }
+    }
 
+    public void contactWithFire(BaseActor a){
         for(BaseActor fireActor : BaseActor.getList(mainStage, "Fire")){
-            if(jax.overlaps(fireActor)){
+            if(a.overlaps(fireActor)){
                 Fire fire = (Fire)fireActor;
-                jax.setHealth(fire.getDamage());
-                healthBar.setValue(jax.getHealth()/ MainGameValues.jaxHealth);
+                a.setHealth(fire.getDamage());
+
             }
         }
+    }
 
-        if(jax.getHealth()<=0 || jax.isOut()){
-            BaseActor loseMessage = new BaseActor(0, 0, uiStage);
-            loseMessage.loadTexture("loseMessage.png");
-            loseMessage.centerAtPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-            loseMessage.setOpacity(0);
-            loseMessage.addAction(Actions.delay(1));
-            loseMessage.addAction(Actions.after(Actions.fadeIn(1)));
-            if(flag) {
-                bruh.play();
-                flag = false;
+    public void jaxHit(){
+        for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")){
+            if(jax.overlaps(b) && jax.isHitting()){
+                StickEnemy st = (StickEnemy) b;
+                st.setHealth(jax.getDamage());
+
             }
-            jax.remove();
         }
+    }
 
+    public void findJax(){
+        for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")){
+            if(jax.getY()==b.getY() && Math.abs(jax.getX()-b.getX())<=25){
+                StickEnemy st = (StickEnemy) b;
+                st.setSpeed(0);
+                st.setHitting(true);
+                jax.setHealth(st.getDamage());
+            } else if(jax.getY()<=b.getY() && Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25){
+                StickEnemy st = (StickEnemy) b;
+                st.setHitting(false);
+                st.addVelocityVec((jax.getX()-b.getX())/(Math.abs(jax.getX()-b.getX())));
+            }
+        }
+    }
+
+    public void ifDead(BaseActor a){
+        if(a.getHealth()<=0 || a.isOut()){
+            if(a == jax){
+                BaseActor loseMessage = new BaseActor(0, 0, uiStage);
+                loseMessage.loadTexture("loseMessage.png");
+                loseMessage.centerAtPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+                loseMessage.setOpacity(0);
+                loseMessage.addAction(Actions.delay(1));
+                loseMessage.addAction(Actions.after(Actions.fadeIn(1)));
+            }
+            a.death();
+        }
+    }
+    public void allLogic(BaseActor a){
+        a.setOut();
+        onGround(a);
+        contactWithFire(a);
+        ifDead(a);
     }
 }
