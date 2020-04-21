@@ -82,7 +82,7 @@ public class Jax extends BaseActor {
     }
 
     public boolean isOnSolid(){
-        for (BaseActor actor : BaseActor.getList(getStage(), "Solid")) {
+        for (BaseActor actor : BaseActor.getList(getStage(), "Actors.Solid")) {
             Solid solid = (Solid) actor;
             if (belowOverlaps(solid) && solid.isEnabled()) {
                 return true;

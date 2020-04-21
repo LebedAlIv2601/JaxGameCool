@@ -1,40 +1,47 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Actors.TilemapActor;
+import com.mygdx.game.Screens.Level1Screen;
+import com.mygdx.game.Screens.LoadingScreen;
+import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Screens.SplashScreen;
+
 
 
 public class JaxGame extends BaseGame {
 
     public OrthographicCamera cameraSplash;
+    public AssetManager assetManager;
 
-    public Texture back;
-    public Texture logo;
-    public Texture flow;
-    public SpriteBatch batch;
+    public LoadingScreen loadingScreen;
+    public SplashScreen splashScreen;
 
     @Override
     public void create() {
 
+        assetManager = new AssetManager();
+
         cameraSplash = new OrthographicCamera();
         cameraSplash.setToOrtho(false, TilemapActor.windowWidth,TilemapActor.windowHeight);
 
-        back = new Texture("Splash/back.png");
-        logo = new Texture("Splash/logo.png");
-        flow = new Texture("Splash/flow.png");
-        batch = new SpriteBatch();
+        loadingScreen = new LoadingScreen(this);
+        splashScreen = new SplashScreen(this);
 
         super.create();
-       setActiveScreen(new SplashScreen(this));
+        this.setScreen(loadingScreen);
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        batch.dispose();
-        this.getScreen().dispose();
+        assetManager.dispose();
+        splashScreen.dispose();
+        loadingScreen.dispose();
+//        this.setScreen(new MenuScreen());
+//        this.setScreen(new Level1Screen());
     }
 }
