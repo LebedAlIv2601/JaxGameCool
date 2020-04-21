@@ -40,7 +40,6 @@ public class SplashScreen extends BaseScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stageSplash);
 
         Runnable transition = new Runnable() {
             @Override

@@ -97,8 +97,6 @@ public class LoadingScreen extends BaseScreen implements Screen {
         jg.assetManager.load("Splash/flow.png", Texture.class);
         jg.assetManager.load("Level1Map/fire.png", Texture.class);
         jg.assetManager.load("Level1Map/Level1TileSet.png", Texture.class);
-//        jg.assetManager.load("Level1Map/Level1Map.tmx", TmxMapLoader.class);
-//        jg.assetManager.load("Level1Map/Level1TileSet.tsx", .class);
         jg.assetManager.load("1.png", Texture.class);
         jg.assetManager.load("2.png", Texture.class);
         jg.assetManager.load("3.png", Texture.class);

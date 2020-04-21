@@ -41,7 +41,6 @@ public class JaxGame extends BaseGame {
         assetManager.dispose();
         splashScreen.dispose();
         loadingScreen.dispose();
-//        this.setScreen(new MenuScreen());
-//        this.setScreen(new Level1Screen());
+        this.getScreen().dispose();
     }
 }
