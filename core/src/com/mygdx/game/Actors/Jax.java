@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,7 +12,7 @@ import com.mygdx.game.Actors.BaseActor;
 import com.mygdx.game.Actors.Solid;
 import com.mygdx.game.MainGameValues;
 
-public class Jax extends BaseActor {
+public class Jax extends BaseActor{
 
     private boolean at;
     private Animation<TextureRegion> walk;
@@ -82,7 +83,7 @@ public class Jax extends BaseActor {
     }
 
     public boolean isOnSolid(){
-        for (BaseActor actor : BaseActor.getList(getStage(), "Actors.Solid")) {
+        for (BaseActor actor : BaseActor.getList(getStage(), "Solid")) {
             Solid solid = (Solid) actor;
             if (belowOverlaps(solid) && solid.isEnabled()) {
                 return true;

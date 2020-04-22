@@ -10,7 +10,12 @@ public class MainGameValues {
     public static String[] texturesForJump = {"jump3.png"};
     public static String[] staying = {"Staying.png"};
     public static float jaxHealth = 100;
+
     public static String[] enemyStand = {"emenySt1.png", "enemySt2.png"};
     public static String[] enemyWalk = {"emenySt1.png"};
     public static String[] enemyHit = {"emenyHit.png", "emenySt1.png"};
+
+    public static String[] grassAnimation = {"trava1.png", "trava2.png"};
+
+    public static String[] signAnimation = {"flag1.png", "flag2.png"};
 }

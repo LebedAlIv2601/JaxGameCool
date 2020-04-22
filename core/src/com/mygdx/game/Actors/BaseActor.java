@@ -293,7 +293,7 @@ public class BaseActor extends Group {
 
         Class theClass = null;
         try{
-            theClass = Class.forName("com.mygdx.game."+className);
+            theClass = Class.forName("com.mygdx.game.Actors."+className);
         }
         catch(Exception error){
             error.printStackTrace();
@@ -448,6 +448,13 @@ public class BaseActor extends Group {
     }
     public boolean isHitting(){
         return at;
+    }
+
+    public void setVelocityVecX(float v){
+        velocityVec.x = v;
+    }
+    public void setVelocityVecY(float v){
+        velocityVec.y = v;
     }
 
 }
