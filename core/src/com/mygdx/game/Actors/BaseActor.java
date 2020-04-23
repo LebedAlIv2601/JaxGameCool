@@ -43,7 +43,7 @@ public class BaseActor extends Group {
     protected float jumpSpeed;
     protected float health;
     protected float damage;
-    private boolean flag;
+    private boolean soundPlayedFlag;
     private Sound bruh;
     private boolean out;
     private boolean at;
@@ -63,7 +63,7 @@ public class BaseActor extends Group {
         maxSpeed = 1000;
         deceleration = 0;
         out = false;
-        flag = true;
+        soundPlayedFlag = false;
         bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
     }
     public void setAnimationPaused(boolean pause){
@@ -426,9 +426,9 @@ public class BaseActor extends Group {
     }
 
     public void death(){
-        if(flag) {
+        if(!soundPlayedFlag) {
             bruh.play();
-            flag = false;
+            soundPlayedFlag = true;
         }
         remove();
     }

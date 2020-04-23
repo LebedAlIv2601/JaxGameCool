@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="20" height="11" tilewidth="100" tileheight="100" infinite="0" nextlayerid="3" nextobjectid="31">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="20" height="11" tilewidth="100" tileheight="100" infinite="0" nextlayerid="3" nextobjectid="33">
  <tileset firstgid="1" source="Level1TileMap.tsx"/>
  <tileset firstgid="5" name="fire" tilewidth="100" tileheight="100" tilecount="1" columns="1">
   <image source="fire.png" width="100" height="100"/>
@@ -14,6 +14,14 @@
   <tile id="0">
    <properties>
     <property name="name" value="Grass"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="7" name="emenySt1" tilewidth="100" tileheight="100" tilecount="1" columns="1">
+  <image source="../emenySt1.png" width="100" height="100"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="StickEnemy"/>
    </properties>
   </tile>
  </tileset>
@@ -76,16 +84,6 @@
   </object>
   <object id="11" gid="5" x="505" y="801" width="100" height="100"/>
   <object id="12" gid="5" x="1902" y="501" width="100" height="100"/>
-  <object id="15" x="822" y="675">
-   <properties>
-    <property name="name" value="StickEnemy"/>
-   </properties>
-  </object>
-  <object id="16" x="1623" y="674">
-   <properties>
-    <property name="name" value="StickEnemy"/>
-   </properties>
-  </object>
   <object id="17" gid="6" x="29" y="693" width="44" height="44"/>
   <object id="18" gid="6" x="159" y="697" width="44" height="44"/>
   <object id="21" gid="6" x="319" y="694" width="44" height="44"/>
@@ -102,5 +100,7 @@
     <property name="name" value="Teleport"/>
    </properties>
   </object>
+  <object id="31" gid="7" x="773" y="677" width="100" height="100"/>
+  <object id="32" gid="7" x="1669" y="598" width="100" height="100"/>
  </objectgroup>
 </map>

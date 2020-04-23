@@ -33,6 +33,7 @@ public class SplashScreen extends BaseScreen implements Screen {
     private Image flow;
 
     public SplashScreen (final JaxGame jg){
+        super(0,0);
         this.jg = jg;
         this.stageSplash = new Stage(new FillViewport(TilemapActor.windowWidth,TilemapActor.windowHeight,jg.cameraSplash));
     }

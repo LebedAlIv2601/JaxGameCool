@@ -15,14 +15,18 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     protected Stage mainStage;
     protected Stage uiStage;
     protected Table uiTable;
+    protected int levelNumber;
+    protected int goalNumber;
 
 
-    public BaseScreen() {
+    public BaseScreen(int n, int g) {
         mainStage = new Stage();
         uiStage = new Stage();
         uiTable = new Table();
         uiTable.setFillParent(true);
         uiStage.addActor(uiTable);
+        levelNumber = n;
+        goalNumber = g;
         initialize();
     }
 

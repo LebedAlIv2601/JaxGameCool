@@ -3,9 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.Actors.TilemapActor;
-import com.mygdx.game.Screens.Level1Screen;
-import com.mygdx.game.Screens.Level2Screen;
 import com.mygdx.game.Screens.LoadingScreen;
+import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Screens.SplashScreen;
 
 
@@ -30,7 +29,7 @@ public class JaxGame extends BaseGame {
         splashScreen = new SplashScreen(this);
 
         super.create();
-        this.setScreen(new Level2Screen());
+        this.setScreen(loadingScreen);
     }
 
     @Override

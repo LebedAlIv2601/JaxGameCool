@@ -25,6 +25,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
     private float progress;
 
     public LoadingScreen(final JaxGame jg){
+        super(0,0);
         this.jg = jg;
         this.shapeRenderer = new ShapeRenderer();
     }
