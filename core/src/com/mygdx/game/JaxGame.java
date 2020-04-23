@@ -31,6 +31,7 @@ public class JaxGame extends BaseGame {
         loadingScreen = new LoadingScreen(this);
         splashScreen = new SplashScreen(this);
 
+
         super.create();
         this.setScreen(loadingScreen);
     }
