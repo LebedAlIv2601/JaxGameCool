@@ -1,6 +1,7 @@
 package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -125,5 +126,15 @@ public class LoadingScreen extends BaseScreen implements Screen {
         jg.assetManager.load("Staying.png", Texture.class);
         jg.assetManager.load("trava1.png", Texture.class);
         jg.assetManager.load("trava2.png", Texture.class);
+        jg.assetManager.load("ost.mp3", Music.class);
+        jg.assetManager.load("Splash/Light.png",Texture.class);
+        jg.assetManager.load("Splash/splashINTRO.mp3",Music.class);
+        jg.assetManager.load("Menu/menuBack.png",Texture.class);
+        jg.assetManager.load("Menu/levelsButton.png",Texture.class);
+        jg.assetManager.load("Menu/menuLogo.png",Texture.class);
+        jg.assetManager.load("Menu/menuTree.png",Texture.class);
+        jg.assetManager.load("Menu/quitButton.png",Texture.class);
+        jg.assetManager.load("Menu/settingsButton.png",Texture.class);
+        jg.assetManager.load("Menu/startButton.png",Texture.class);
     }
 }
