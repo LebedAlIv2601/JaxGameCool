@@ -19,10 +19,7 @@ public class MainGameValues {
 
     public static String[] signAnimation = {"flag1.png", "flag2.png"};
 
-    public static boolean lvl1Passed = false;
-
-    public static String[] maps = {"Level1Map.tmx", "Level2Map.tmx"};
-    public static boolean[] goals = {false, false, false};
+    public static String[] maps = {"Level1Map1.tmx", "Level2Map.tmx"};
 
     public static ArrayList<BaseLevelScreen> lvlArray;
     public static int getGoal(int n){

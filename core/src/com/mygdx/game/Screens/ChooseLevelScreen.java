@@ -1,7 +1,10 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.BaseGame;
 import com.mygdx.game.JaxGame;
@@ -9,10 +12,18 @@ import com.mygdx.game.MainGameValues;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.forever;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+
 
 public class ChooseLevelScreen extends BaseScreen {
     private ArrayList<TextButton> lvlButtons;
-    private ArrayList<BaseLevelScreen> lvlArray;
+    private Image menuTree;
+    private Image menuBack;
     private int n;
 
     public ChooseLevelScreen() {
@@ -21,6 +32,23 @@ public class ChooseLevelScreen extends BaseScreen {
 
     @Override
     public void initialize() {
+        Texture menuBackTexture = new Texture("Menu/menuBack.png");
+        menuBack = new Image(menuBackTexture);
+        Texture menuTreeTexture = new Texture("Menu/menuTree.png");
+        menuTree = new Image(menuTreeTexture);
+
+        menuBack.setPosition(0f,0f);
+        menuBack.setSize(mainStage.getWidth(),mainStage.getHeight());
+        menuBack.addAction(sequence(alpha(0f),fadeIn(1f)));
+
+        menuTree.setPosition(50,0);
+        menuTree.setSize(mainStage.getWidth(),mainStage.getHeight());
+        menuTree.addAction(forever(sequence(moveTo(-70,0,5f, Interpolation.pow2),
+                delay(1f),
+                moveTo(50,0,5f,Interpolation.pow2))));
+        mainStage.addActor(menuBack);
+        mainStage.addActor(menuTree);
+
         lvlButtons = new ArrayList<TextButton>();
         uiTable.pad(20);
         for(int i = 0; i< MainGameValues.maps.length; i++){
@@ -59,4 +87,5 @@ public class ChooseLevelScreen extends BaseScreen {
             uiTable.row();
         }
     }
+
 }

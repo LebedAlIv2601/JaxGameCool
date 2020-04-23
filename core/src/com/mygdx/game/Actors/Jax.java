@@ -71,12 +71,20 @@ public class Jax extends BaseActor{
             belowSensor.setColor(Color.RED);
             setAnimation(jump, flip);
         }
-        alignCamera();
-
+        if(!isDead()) {
+            alignCamera();
+        }
 
     }
 
-
+    public void death() {
+        if(!soundPlayedFlag) {
+            bruh.play();
+            soundPlayedFlag = true;
+        }
+        dead = true;
+        setPosition(-1000,-1000);
+    }
 
     public boolean belowOverlaps(BaseActor actor){
         return belowSensor.overlaps(actor);

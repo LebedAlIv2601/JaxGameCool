@@ -1,6 +1,7 @@
 package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -54,6 +55,7 @@ public class BaseLevelScreen extends BaseScreen {
     private boolean allCollected;
     private boolean checkCrystalsFlag;
     private DialogBox dialogBox;
+    private TextButton jumpButton;
 
     public BaseLevelScreen(int n, int g) {
         super(n, g);
@@ -152,16 +154,16 @@ public class BaseLevelScreen extends BaseScreen {
             }
         });
 
-        TextButton jumpButton = new TextButton("jump", BaseGame.textButtonStyle);
+        jumpButton = new TextButton("jump", BaseGame.textButtonStyle);
 
         jumpButton.addListener(new EventListener() {
             @Override
 
             public boolean handle(Event e) {
-                if (!isTouchDownEvent(e)){
+                if (!isTouchDownEvent(e)) {
                     return false;
                 }
-                if(jax.isOnSolid()){
+                if (jax.isOnSolid()) {
                     jax.jump();
                 }
                 return false;
@@ -202,8 +204,9 @@ public class BaseLevelScreen extends BaseScreen {
 
 
         dialogBox = new DialogBox(Gdx.graphics.getWidth()/2 - 225, Gdx.graphics.getHeight() - 250,uiStage);
-        dialogBox.setDialogSize(450, 200);
+        dialogBox.setDialogSize(450, 150);
         dialogBox.setFontScale(0.8f);
+        dialogBox.setFontColor(Color.GOLD);
         dialogBox.alignCenter();
         dialogBox.setVisible(false);
 
@@ -245,18 +248,20 @@ public class BaseLevelScreen extends BaseScreen {
     @Override
     public void update(float dt){
 
-        if(leftButton.isPressed()){
+        if(leftButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.A)){
             jax.addVelocityVec(-1);
-        } else if(rightButton.isPressed()){
+        } else if(rightButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.D)){
             jax.addVelocityVec(1);
         }else {
             jax.decelerateActor();
         }
-        if(attackButton.isPressed()){
+        if(attackButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             jax.setHitting(true);
         } else {
             jax.setHitting(false);
         }
+
+
 
         for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")) {
             StickEnemy st =(StickEnemy) b;
@@ -311,15 +316,19 @@ public class BaseLevelScreen extends BaseScreen {
 
     public void findJax(){
         for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")){
-            if(jax.getY()==b.getY() && Math.abs(jax.getX()-b.getX())<=25){
+            if(Math.abs(jax.getY()-b.getY())<50 && Math.abs(jax.getX()-b.getX())<=25){
                 StickEnemy st = (StickEnemy) b;
-                st.setSpeed(0);
+                st.velocityVec.x = 0;
                 st.setHitting(true);
                 jax.setHealth(st.getDamage());
-            } else if(jax.getY()<=b.getY() && Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25){
+            } else if((jax.getY()<=b.getY()||jax.getY()-b.getY()<=150) && Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25){
                 StickEnemy st = (StickEnemy) b;
                 st.setHitting(false);
                 st.addVelocityVec((jax.getX()-b.getX())/(Math.abs(jax.getX()-b.getX())));
+            } else{
+                StickEnemy st = (StickEnemy) b;
+                st.setHitting(false);
+                st.velocityVec.x = 0;
             }
         }
     }
@@ -369,9 +378,9 @@ public class BaseLevelScreen extends BaseScreen {
     public void collectFirstAidKit(){
         for(BaseActor b : BaseActor.getList(mainStage, "FirstAidKit")){
             if(jax.overlaps(b)){
-                FirstAidKit fai = (FirstAidKit) b;
-                fai.clearActions();
-                fai.addAction(Actions.removeActor());
+                FirstAidKit fak = (FirstAidKit) b;
+                fak.clearActions();
+                fak.addAction(Actions.removeActor());
                 jax.setHealth(50);
             }
         }
@@ -383,8 +392,7 @@ public class BaseLevelScreen extends BaseScreen {
                 if(levelNumber+1 == MainGameValues.maps.length){
                     BaseGame.setActiveScreen(new MenuScreen());
                 } else {
-                    int gn = MainGameValues.getGoal(levelNumber);
-                    BaseGame.setActiveScreen(new BaseLevelScreen(levelNumber + 1, gn));
+                    BaseGame.setActiveScreen(new BaseLevelScreen(levelNumber + 1, MainGameValues.getGoal(levelNumber)));
                 }
                 ost.dispose();
             }

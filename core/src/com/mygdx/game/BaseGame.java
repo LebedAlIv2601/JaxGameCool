@@ -29,13 +29,13 @@ public abstract class BaseGame extends Game {
         InputMultiplexer im = new InputMultiplexer();
         Gdx.input.setInputProcessor(im);
         labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("cooper.fnt"));
+        labelStyle.font = new BitmapFont(Gdx.files.internal("jokerman.fnt"));
 
         textButtonStyle = new TextButtonStyle();
         Texture buttonTex = new Texture(Gdx.files.internal("button.png"));
         NinePatch buttonPath = new NinePatch(buttonTex, 24,24,24,24);
         textButtonStyle.up = new NinePatchDrawable(buttonPath);
-        textButtonStyle.font = new BitmapFont(Gdx.files.internal("cooper.fnt"));
+        textButtonStyle.font = new BitmapFont(Gdx.files.internal("jokerman.fnt"));
         textButtonStyle.fontColor = Color.GOLD;
 
     }

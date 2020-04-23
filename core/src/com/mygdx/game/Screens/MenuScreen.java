@@ -29,11 +29,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 
 public class MenuScreen extends BaseScreen implements Screen {
-
-    public MenuScreen() {
-        super(0, 0);
-    }
-
     private Image startButton;
     private Image menuBack;
     private Image levelsButton;
@@ -42,6 +37,12 @@ public class MenuScreen extends BaseScreen implements Screen {
     private Image menuTree;
     private Image menuLogo;
     private OrthographicCamera camMenu;
+
+    public MenuScreen() {
+        super(0, 0);
+    }
+
+
 
     @Override
     public void show() {
@@ -124,92 +125,24 @@ public class MenuScreen extends BaseScreen implements Screen {
 
         camMenu = new OrthographicCamera();
         camMenu.setToOrtho(false,mainStage.getWidth(),mainStage.getHeight());
-
-//        batch = new SpriteBatch();
-
-
-
-//        TextButton startButton = new TextButton("Start", JaxGame.textButtonStyle);
-//
-//        startButton.addListener(new EventListener() {
-//            @Override
-//            public boolean handle(Event e) {
-//                if ((!(e instanceof InputEvent) || !((InputEvent)e).getType().equals(InputEvent.Type.touchDown))){
-//                    return false;
-//                }
-//                JaxGame.setActiveScreen(new Level1Screen());
-//                return false;
-//            }
-//        });
-//
-//        TextButton levelsButton = new TextButton("Levels", BaseGame.textButtonStyle);
-//
-//        levelsButton.addListener(new EventListener() {
-//            @Override
-//            public boolean handle(Event e) {
-//                if ((!(e instanceof InputEvent) || !((InputEvent)e).getType().equals(InputEvent.Type.touchDown))){
-//                    return false;
-//                }
-//                Gdx.app.exit();
-//                return false;
-//            }
-//        });
-//
-//        TextButton settingsButton = new TextButton("Settings", BaseGame.textButtonStyle);
-//
-//        settingsButton.addListener(new EventListener() {
-//            @Override
-//            public boolean handle(Event e) {
-//                if ((!(e instanceof InputEvent) || !((InputEvent)e).getType().equals(InputEvent.Type.touchDown))){
-//                    return false;
-//                }
-//                Gdx.app.exit();
-//                return false;
-//            }
-//        });
-//
-//        TextButton quitButton = new TextButton("Quit", BaseGame.textButtonStyle);
-//
-//        quitButton.addListener(new EventListener() {
-//            @Override
-//            public boolean handle(Event e) {
-//                if ((!(e instanceof InputEvent) || !((InputEvent)e).getType().equals(InputEvent.Type.touchDown))){
-//                    return false;
-//                }
-//                Gdx.app.exit();
-//                return false;
-//            }
-//        });
-//
-//        uiTable.pad(10);
-//        uiTable.add(startButton).colspan(1);
-//        uiTable.row();
-//        uiTable.pad(10);
-//        uiTable.add(levelsButton);
-//        uiTable.row();
-//        uiTable.pad(10);
-//        uiTable.add(settingsButton);
-//        uiTable.row();
-//        uiTable.pad(10);
-//        uiTable.add(quitButton);
-
     }
 
 
     public void handleInput(){
 
         if(Gdx.input.isTouched()){
-            Vector3 menuTouch = new Vector3();
-            menuTouch.set(Gdx.input.getX(),Gdx.input.getY(),0);
-            camMenu.unproject(menuTouch);
-            if(menuTouch.x > startButton.getImageX() &&
-                    menuTouch.x < mainStage.getWidth()/2 + 155 &&
-                    menuTouch.y < mainStage.getHeight()/2 +160  &&
-                    menuTouch.y > mainStage.getHeight()/2 -5 ){
-                JaxGame.setActiveScreen(new Level1Screen());
+            if(isButtonTouch(startButton)){
+                JaxGame.setActiveScreen(new BaseLevelScreen(0,0));
             }
-        });
-
+            if(isButtonTouch(levelsButton)){
+                JaxGame.setActiveScreen(new ChooseLevelScreen());
+            }
+            if(isButtonTouch(settingsButton)){
+                Gdx.app.exit();
+            }
+            if(isButtonTouch(quitButton)){
+                Gdx.app.exit();
+            }
         }
     }
 
@@ -218,6 +151,20 @@ public class MenuScreen extends BaseScreen implements Screen {
         camMenu.update();
 
         handleInput();
+    }
+
+    public boolean isButtonTouch(Image b){
+        Vector3 menuTouch = new Vector3();
+        menuTouch.set(Gdx.input.getX(),Gdx.input.getY(),0);
+        camMenu.unproject(menuTouch);
+        if(menuTouch.x > b.getX() &&
+                menuTouch.x < b.getX()+b.getWidth() &&
+                menuTouch.y < b.getY()+b.getHeight() &&
+                menuTouch.y > b.getY() ){
+            return true;
+        } else{
+            return false;
+        }
     }
 
 }
