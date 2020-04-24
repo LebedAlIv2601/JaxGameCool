@@ -150,6 +150,8 @@ public class MenuScreen extends BaseScreen implements Screen {
     public void update(float dt) {
         camMenu.update();
 
+
+
         handleInput();
     }
 

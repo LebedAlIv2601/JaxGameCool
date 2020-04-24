@@ -321,7 +321,7 @@ public class BaseLevelScreen extends BaseScreen {
                 st.velocityVec.x = 0;
                 st.setHitting(true);
                 jax.setHealth(st.getDamage());
-            } else if((jax.getY()<=b.getY()||jax.getY()-b.getY()<=150) && Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25){
+            } else if(Math.abs(jax.getY()-b.getY())<=150 && Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25){
                 StickEnemy st = (StickEnemy) b;
                 st.setHitting(false);
                 st.addVelocityVec((jax.getX()-b.getX())/(Math.abs(jax.getX()-b.getX())));
