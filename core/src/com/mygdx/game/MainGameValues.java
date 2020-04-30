@@ -19,7 +19,7 @@ public class MainGameValues {
 
     public static String[] signAnimation = {"flag1.png", "flag2.png"};
 
-    public static String[] maps = {"Level1Map.tmx", "Level2Map.tmx"};
+    public static String[] maps = {"Level1Map.tmx", "Level2Map2.tmx"};
 
     public static int getGoal(int n){
         int g;

@@ -43,6 +43,7 @@ public class BaseActor extends Group {
     protected float jumpSpeed;
     protected float health;
     protected float damage;
+    protected float climbSpeed;
     protected boolean soundPlayedFlag;
     protected Sound bruh;
     private boolean out;

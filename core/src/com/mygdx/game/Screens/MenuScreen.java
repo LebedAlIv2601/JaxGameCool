@@ -3,6 +3,8 @@ package com.mygdx.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,6 +39,9 @@ public class MenuScreen extends BaseScreen implements Screen {
     private Image menuTree;
     private Image menuLogo;
     private OrthographicCamera camMenu;
+    private static Music menuOst;
+    private float audioVolume;
+    private Sound buttonClickSound;
 
     public MenuScreen() {
         super(0, 0);
@@ -122,7 +127,13 @@ public class MenuScreen extends BaseScreen implements Screen {
 
     @Override
     public void initialize() {
+        buttonClickSound = Gdx.audio.newSound(Gdx.files.internal("buttonClickSound.mp3"));
+        audioVolume = 1;
 
+        menuOst = Gdx.audio.newMusic(Gdx.files.internal("menuOst.mp3"));
+        menuOst.setLooping(true);
+        menuOst.setVolume(audioVolume/3);
+        menuOst.play();
         camMenu = new OrthographicCamera();
         camMenu.setToOrtho(false,mainStage.getWidth(),mainStage.getHeight());
     }
@@ -133,6 +144,7 @@ public class MenuScreen extends BaseScreen implements Screen {
         if(Gdx.input.isTouched()){
             if(isButtonTouch(startButton)){
                 JaxGame.setActiveScreen(new BaseLevelScreen(0,0));
+                menuOst.dispose();
             }
             if(isButtonTouch(levelsButton)){
                 JaxGame.setActiveScreen(new ChooseLevelScreen());
@@ -163,10 +175,14 @@ public class MenuScreen extends BaseScreen implements Screen {
                 menuTouch.x < b.getX()+b.getWidth() &&
                 menuTouch.y < b.getY()+b.getHeight() &&
                 menuTouch.y > b.getY() ){
+            buttonClickSound.play();
             return true;
         } else{
             return false;
         }
+    }
+    public static void disposeOst(){
+        menuOst.dispose();
     }
 
 }

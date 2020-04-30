@@ -21,6 +21,8 @@ public class Jax extends BaseActor{
     private Animation<TextureRegion> stand;
     private float jumpSpeed;
     private BaseActor belowSensor;
+    private boolean stairsOverlap;
+    private Sound deathSound;
 
 
 
@@ -40,6 +42,8 @@ public class Jax extends BaseActor{
         gravity = 700;
         maxVerticalSpeed = 1000;
         jumpSpeed = 450;
+        climbSpeed = 200;
+        stairsOverlap = false;
         setHealth(MainGameValues.jaxHealth);
         setDamage(5f);
 
@@ -49,10 +53,13 @@ public class Jax extends BaseActor{
         belowSensor.setSize(this.getWidth()-8,8);
         belowSensor.setBoundaryRectangle();
         belowSensor.setVisible(false);
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("deathSound.mp3"));
+
 
     }
 
     public void act(float dt) {
+
         super.act(dt);
 
         physicsApply(dt);
@@ -67,9 +74,11 @@ public class Jax extends BaseActor{
             } else{
                 setAnimation(walk,flip);
             }
-        } else{
+        } else if(!stairsOverlap){
             belowSensor.setColor(Color.RED);
             setAnimation(jump, flip);
+        } else{
+            setAnimation(stand, flip);
         }
         if(!isDead()) {
             alignCamera();
@@ -79,7 +88,7 @@ public class Jax extends BaseActor{
 
     public void death() {
         if(!soundPlayedFlag) {
-            bruh.play();
+            deathSound.play();
             soundPlayedFlag = true;
         }
         dead = true;
@@ -102,5 +111,19 @@ public class Jax extends BaseActor{
 
     public void jump(){
         velocityVec.y = jumpSpeed;
+    }
+
+    public void setGravity(float g){
+        gravity = g;
+    }
+
+    public void setStairsOverlap(boolean r){
+        stairsOverlap = r;
+    }
+    public boolean getStairsOverlap(){
+        return stairsOverlap;
+    }
+    public void climb(){
+        velocityVec.y = climbSpeed;
     }
 }

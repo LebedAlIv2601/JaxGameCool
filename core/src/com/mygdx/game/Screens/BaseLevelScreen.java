@@ -28,6 +28,8 @@ import com.mygdx.game.Actors.Grass;
 import com.mygdx.game.Actors.Jax;
 import com.mygdx.game.Actors.Sign;
 import com.mygdx.game.Actors.Solid;
+import com.mygdx.game.Actors.Stairs;
+import com.mygdx.game.Actors.StairsRectangle;
 import com.mygdx.game.Actors.Teleport;
 import com.mygdx.game.Actors.TilemapActor;
 import com.mygdx.game.BaseGame;
@@ -40,13 +42,19 @@ public class BaseLevelScreen extends BaseScreen {
     private TextButton leftButton;
     private TextButton rightButton;
     private TextButton attackButton;
+    private TextButton climbButton;
     private TextButton menuButton;
     private ProgressBar healthBar;
+    private ProgressBar staminaBar;
     private Label loseLabel;
     private ProgressBar.ProgressBarStyle pbs;
     private Pixmap pixmap;
     private TextureRegionDrawable drawable;
     private Sound bruh;
+    private Sound crystalCollectSound;
+    private Sound firstAidKitSound;
+    private Sound jumpSound;
+    private Sound whatSound;
     private Music ost;
     private boolean flag;
     private float audioVolume;
@@ -54,6 +62,7 @@ public class BaseLevelScreen extends BaseScreen {
     private boolean goal;
     private boolean allCollected;
     private boolean checkCrystalsFlag;
+    private boolean zeroClimbFlag;
     private DialogBox dialogBox;
     private TextButton jumpButton;
 
@@ -68,6 +77,16 @@ public class BaseLevelScreen extends BaseScreen {
         for(MapObject obj : tma.getRectangleList("Solid")){
             MapProperties props = obj.getProperties();
             new Solid((float)props.get("x"), (float)props.get("y"), (float)props.get("width"), (float)props.get("height"), mainStage);
+        }
+
+        for(MapObject obj : tma.getRectangleList("StairsRectangle")){
+            MapProperties props = obj.getProperties();
+            new StairsRectangle((float)props.get("x"), (float)props.get("y"), (float)props.get("width"), (float)props.get("height"), mainStage);
+        }
+
+        for(MapObject obj : tma.getTileList("Stairs")){
+            MapProperties props = obj.getProperties();
+            new Stairs((float)props.get("x"), (float)props.get("y"), mainStage);
         }
         for(MapObject obj : tma.getTileList("Grass")){
             MapProperties props = obj.getProperties();
@@ -101,44 +120,27 @@ public class BaseLevelScreen extends BaseScreen {
 
         MapObject startPoint = tma.getRectangleList("start").get(0);
         MapProperties startProps = startPoint.getProperties();
-        jax = new Jax((float)startProps.get("x"), (float)startProps.get("y"), mainStage);
+        jax = new Jax((float)startProps.get("x"), (float)startProps.get("y")+3000, mainStage);
 
         for(MapObject obj : tma.getTileList("StickEnemy")){
             MapProperties props = obj.getProperties();
-            new StickEnemy((float)props.get("x"), (float)props.get("y"), mainStage);
+            new StickEnemy((float)props.get("x"), (float)props.get("y")+2000, mainStage);
         }
 
+        healthBar = createProgressBar(Color.RED, Color.GREEN);
+        staminaBar = createProgressBar(Color.GRAY, Color.BLUE);
 
-        pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.RED);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        pixmap.dispose();
-        ProgressBar.ProgressBarStyle pbs = new ProgressBar.ProgressBarStyle();
-        pbs.background= drawable;
 
-        pixmap = new Pixmap(0, 20, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        pixmap.dispose();
-        pbs.knob = drawable;
-
-        pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GREEN);
-        pixmap.fill();
-        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
-        pixmap.dispose();
-        pbs.knobBefore = drawable;
-
-        healthBar = new ProgressBar(0, 1, 0.01f, false, pbs);
-        healthBar.setValue(1);
-        healthBar.setAnimateDuration(0.25f);
 // healthBar.setBounds(10,10,500,20);
         Button.ButtonStyle buttonStyleRestart = new Button.ButtonStyle();
         Texture buttonRestart = new Texture(Gdx.files.internal("restart.png"));
         TextureRegion buttonRegionRestart = new TextureRegion(buttonRestart);
         buttonStyleRestart.up = new TextureRegionDrawable(buttonRegionRestart);
+
+        crystalCollectSound = Gdx.audio.newSound(Gdx.files.internal("crystalCollectSound.mp3"));
+        firstAidKitSound = Gdx.audio.newSound(Gdx.files.internal("firstAidKitSound.mp3"));
+        jumpSound = Gdx.audio.newSound(Gdx.files.internal("jumpSound.mp3"));
+        whatSound = Gdx.audio.newSound(Gdx.files.internal("whatSound.mp3"));
 
         Button restartButton = new Button(buttonStyleRestart);
 
@@ -164,11 +166,16 @@ public class BaseLevelScreen extends BaseScreen {
                     return false;
                 }
                 if (jax.isOnSolid()) {
+                    jumpSound.play();
                     jax.jump();
                 }
                 return false;
             }
         });
+
+        climbButton = new TextButton("climb", BaseGame.textButtonStyle);
+
+
 
         menuButton = new TextButton("Menu", BaseGame.textButtonStyle);
 
@@ -212,10 +219,13 @@ public class BaseLevelScreen extends BaseScreen {
 
 
         uiTable.pad(10);
-        uiTable.add(healthBar).top().colspan(2);
+        uiTable.add(healthBar).top().colspan(1);
+        uiTable.add(staminaBar).top().colspan(1);
         uiTable.add().expandX().expandY();
         uiTable.add(menuButton).top().right();
         uiTable.add(restartButton).top().right();
+        uiTable.row();
+        uiTable.add(climbButton).expandY().bottom().colspan(2);
         uiTable.row();
         uiTable.add(leftButton).bottom();
         uiTable.add(rightButton).bottom();
@@ -243,6 +253,7 @@ public class BaseLevelScreen extends BaseScreen {
         ost.play();
         flag = true;
         allCollected = false;
+        zeroClimbFlag = false;
     }
 
     @Override
@@ -262,6 +273,21 @@ public class BaseLevelScreen extends BaseScreen {
         }
 
 
+        if(climbButton.isPressed() && jax.getStairsOverlap()) {
+            jax.setGravity(0);
+            jax.climb();
+        } else if(jax.getStairsOverlap()){
+            if(!zeroClimbFlag){
+                jax.velocityVec.y = 0;
+                zeroClimbFlag = true;
+            }
+            jax.setGravity(200);
+        } else {
+            jax.setGravity(700);
+            zeroClimbFlag = false;
+        }
+
+
 
         for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")) {
             StickEnemy st =(StickEnemy) b;
@@ -275,6 +301,7 @@ public class BaseLevelScreen extends BaseScreen {
         crystalCollect();
         collectFirstAidKit();
         overlapSign();
+        overlapStairs();
         healthBar.setValue(jax.getHealth()/ MainGameValues.jaxHealth);
 
     }
@@ -360,6 +387,7 @@ public class BaseLevelScreen extends BaseScreen {
                 Crystal cr = (Crystal)b;
                 cr.clearActions();
                 cr.addAction(Actions.removeActor());
+                crystalCollectSound.play();
             }
         }
     }
@@ -381,6 +409,7 @@ public class BaseLevelScreen extends BaseScreen {
                 FirstAidKit fak = (FirstAidKit) b;
                 fak.clearActions();
                 fak.addAction(Actions.removeActor());
+                firstAidKitSound.play();
                 jax.setHealth(50);
             }
         }
@@ -417,5 +446,47 @@ public class BaseLevelScreen extends BaseScreen {
                 sign.setViewing(false);
             }
         }
+    }
+
+    public void overlapStairs(){
+        for(BaseActor b : BaseActor.getList(mainStage, "StairsRectangle")){
+            StairsRectangle stairs = (StairsRectangle) b;
+            if(jax.overlaps(stairs)){
+                jax.setStairsOverlap(true);
+            } else{
+                jax.setStairsOverlap(false);
+            }
+        }
+    }
+
+    public ProgressBar createProgressBar(Color c1, Color c2){
+        pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
+        pixmap.setColor(c1);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+        pbs = new ProgressBar.ProgressBarStyle();
+        pbs.background= drawable;
+
+        pixmap = new Pixmap(0, 20, Pixmap.Format.RGBA8888);
+        pixmap.setColor(c2);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+        pbs.knob = drawable;
+
+        pixmap = new Pixmap(100, 20, Pixmap.Format.RGBA8888);
+        pixmap.setColor(c2);
+        pixmap.fill();
+        drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+        pbs.knobBefore = drawable;
+
+        ProgressBar pb;
+
+        pb = new ProgressBar(0, 1, 0.01f, false, pbs);
+        pb.setValue(1);
+        pb.setAnimateDuration(0.25f);
+        return pb;
     }
 }

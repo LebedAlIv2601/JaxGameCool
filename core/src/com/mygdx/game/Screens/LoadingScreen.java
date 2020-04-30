@@ -110,6 +110,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
         jg.assetManager.load("4going.png", Texture.class);
         jg.assetManager.load("5going.png", Texture.class);
         jg.assetManager.load("bruh1.mp3", Sound.class);
+        jg.assetManager.load("buttonClickSound.mp3", Sound.class);
         jg.assetManager.load("button.png", Texture.class);
         jg.assetManager.load("cooper.fnt", BitmapFont.class);
         jg.assetManager.load("cooper.png", Texture.class);
@@ -127,6 +128,7 @@ public class LoadingScreen extends BaseScreen implements Screen {
         jg.assetManager.load("trava1.png", Texture.class);
         jg.assetManager.load("trava2.png", Texture.class);
         jg.assetManager.load("ost.mp3", Music.class);
+        jg.assetManager.load("menuOst.mp3", Music.class);
         jg.assetManager.load("Splash/Light.png",Texture.class);
         jg.assetManager.load("Splash/splashINTRO.mp3",Music.class);
         jg.assetManager.load("Menu/menuBack.png",Texture.class);
