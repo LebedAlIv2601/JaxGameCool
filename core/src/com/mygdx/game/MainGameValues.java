@@ -10,6 +10,7 @@ public class MainGameValues {
     public static String[] texturesForJump = {"jump3.png"};
     public static String[] staying = {"Staying.png", "Staying.png"};
     public static float jaxHealth = 100;
+    public static float jaxStamina = 100;
 
     public static String[] enemyStand = {"EnemySt1.png", "enemySt2.png"};
     public static String[] enemyWalk = {"runEnemy1.png", "runEnemy2.png", "runEnemy3.png", "runEnemy4.png"};
@@ -19,7 +20,7 @@ public class MainGameValues {
 
     public static String[] signAnimation = {"flag1.png", "flag2.png"};
 
-    public static String[] maps = {"Level1Map.tmx", "Level2Map2.tmx"};
+    public static String[] maps = {"Level1Map.tmx", "Level2Map.tmx"};
 
     public static int getGoal(int n){
         int g;

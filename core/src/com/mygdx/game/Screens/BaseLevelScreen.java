@@ -65,6 +65,8 @@ public class BaseLevelScreen extends BaseScreen {
     private boolean zeroClimbFlag;
     private DialogBox dialogBox;
     private TextButton jumpButton;
+    private boolean sayWhat;
+    public boolean zeroStamina;
 
     public BaseLevelScreen(int n, int g) {
         super(n, g);
@@ -120,11 +122,11 @@ public class BaseLevelScreen extends BaseScreen {
 
         MapObject startPoint = tma.getRectangleList("start").get(0);
         MapProperties startProps = startPoint.getProperties();
-        jax = new Jax((float)startProps.get("x"), (float)startProps.get("y")+3000, mainStage);
+        jax = new Jax((float)startProps.get("x"), (float)startProps.get("y"), mainStage);
 
         for(MapObject obj : tma.getTileList("StickEnemy")){
             MapProperties props = obj.getProperties();
-            new StickEnemy((float)props.get("x"), (float)props.get("y")+2000, mainStage);
+            new StickEnemy((float)props.get("x"), (float)props.get("y"), mainStage);
         }
 
         healthBar = createProgressBar(Color.RED, Color.GREEN);
@@ -220,7 +222,7 @@ public class BaseLevelScreen extends BaseScreen {
 
         uiTable.pad(10);
         uiTable.add(healthBar).top().colspan(1);
-        uiTable.add(staminaBar).top().colspan(1);
+        uiTable.add(staminaBar).padLeft(10).top().colspan(1);
         uiTable.add().expandX().expandY();
         uiTable.add(menuButton).top().right();
         uiTable.add(restartButton).top().right();
@@ -254,6 +256,8 @@ public class BaseLevelScreen extends BaseScreen {
         flag = true;
         allCollected = false;
         zeroClimbFlag = false;
+        sayWhat = false;
+        zeroStamina = false;
     }
 
     @Override
@@ -266,12 +270,16 @@ public class BaseLevelScreen extends BaseScreen {
         }else {
             jax.decelerateActor();
         }
-        if(attackButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+
+        if (!zeroStamina&&(attackButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.SPACE)) ) {
             jax.setHitting(true);
+            jax.setStamina(-1.2f);
         } else {
             jax.setHitting(false);
+            if(!attackButton.isPressed()) {
+                jax.setStamina(0.3f);
+            }
         }
-
 
         if(climbButton.isPressed() && jax.getStairsOverlap()) {
             jax.setGravity(0);
@@ -302,7 +310,9 @@ public class BaseLevelScreen extends BaseScreen {
         collectFirstAidKit();
         overlapSign();
         overlapStairs();
+        controlZeroStamina();
         healthBar.setValue(jax.getHealth()/ MainGameValues.jaxHealth);
+        staminaBar.setValue(jax.getStamina()/MainGameValues.jaxStamina);
 
     }
 
@@ -400,6 +410,7 @@ public class BaseLevelScreen extends BaseScreen {
             collectMessage.setOpacity(0);
             collectMessage.addAction(Actions.sequence(Actions.fadeIn(1), Actions.fadeOut(1)));
             checkCrystalsFlag = true;
+            goal = true;
         }
     }
 
@@ -424,6 +435,13 @@ public class BaseLevelScreen extends BaseScreen {
                     BaseGame.setActiveScreen(new BaseLevelScreen(levelNumber + 1, MainGameValues.getGoal(levelNumber)));
                 }
                 ost.dispose();
+            } else if(jax.overlaps(b) && !goal){
+                if(!sayWhat){
+                    whatSound.play();
+                    sayWhat = true;
+                }
+            } else {
+                sayWhat = false;
             }
         }
 
@@ -488,5 +506,13 @@ public class BaseLevelScreen extends BaseScreen {
         pb.setValue(1);
         pb.setAnimateDuration(0.25f);
         return pb;
+    }
+
+    public void controlZeroStamina(){
+        if(jax.getStamina()<=0){
+            zeroStamina = true;
+        } else if(jax.getStamina() >= 50){
+            zeroStamina = false;
+        }
     }
 }

@@ -23,6 +23,7 @@ public class Jax extends BaseActor{
     private BaseActor belowSensor;
     private boolean stairsOverlap;
     private Sound deathSound;
+    private float stamina;
 
 
 
@@ -45,12 +46,13 @@ public class Jax extends BaseActor{
         climbSpeed = 200;
         stairsOverlap = false;
         setHealth(MainGameValues.jaxHealth);
+        setStamina(MainGameValues.jaxStamina);
         setDamage(5f);
 
         setBoundaryPolygon(8);
         belowSensor = new BaseActor(0,0,s);
         belowSensor.loadTexture("button.png");
-        belowSensor.setSize(this.getWidth()-8,8);
+        belowSensor.setSize(this.getWidth()-10,8);
         belowSensor.setBoundaryRectangle();
         belowSensor.setVisible(false);
         deathSound = Gdx.audio.newSound(Gdx.files.internal("deathSound.mp3"));
@@ -63,8 +65,11 @@ public class Jax extends BaseActor{
         super.act(dt);
 
         physicsApply(dt);
+        health = MathUtils.clamp(health, 0, MainGameValues.jaxHealth);
+        stamina = MathUtils.clamp(stamina, 0, MainGameValues.jaxStamina);
 
-        belowSensor.setPosition(getX()+4,getY()-8);
+
+        belowSensor.setPosition(getX()+5,getY()-8);
         if(isHitting()){
             setAnimation(hit, flip);
         } else if(this.isOnSolid()){
@@ -125,5 +130,11 @@ public class Jax extends BaseActor{
     }
     public void climb(){
         velocityVec.y = climbSpeed;
+    }
+    public void setStamina(float s){
+        stamina += s;
+    }
+    public float getStamina(){
+        return stamina;
     }
 }
