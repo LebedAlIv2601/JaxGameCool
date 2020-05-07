@@ -3,11 +3,11 @@ package com.mygdx.game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.Actors.TilemapActor;
+import com.mygdx.game.Screens.BaseLevelScreen;
+import com.mygdx.game.Screens.LoadingLevelsScreen;
 import com.mygdx.game.Screens.LoadingScreen;
 import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Screens.SplashScreen;
-
-
 
 public class JaxGame extends BaseGame {
 
@@ -22,12 +22,12 @@ public class JaxGame extends BaseGame {
 
         assetManager = new AssetManager();
 
+
         cameraSplash = new OrthographicCamera();
         cameraSplash.setToOrtho(false, TilemapActor.windowWidth,TilemapActor.windowHeight);
 
         loadingScreen = new LoadingScreen(this);
         splashScreen = new SplashScreen(this);
-
 
         super.create();
         this.setScreen(loadingScreen);

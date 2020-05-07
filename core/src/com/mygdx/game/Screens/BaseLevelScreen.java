@@ -33,6 +33,7 @@ import com.mygdx.game.Actors.StairsRectangle;
 import com.mygdx.game.Actors.Teleport;
 import com.mygdx.game.Actors.TilemapActor;
 import com.mygdx.game.BaseGame;
+import com.mygdx.game.JaxGame;
 import com.mygdx.game.MainGameValues;
 import com.mygdx.game.Actors.StickEnemy;
 
@@ -57,8 +58,9 @@ public class BaseLevelScreen extends BaseScreen {
     private Sound firstAidKitSound;
     private Sound jumpSound;
     private Sound whatSound;
-    private Music ost;
+    public static Music ost;
     private boolean flag;
+    private float audioVolume;
     private TilemapActor tma;
     private boolean goal;
     private boolean allCollected;
@@ -70,13 +72,14 @@ public class BaseLevelScreen extends BaseScreen {
     public boolean zeroStamina;
     private Label healthLabel;
 
-    public BaseLevelScreen(int n, int g) {
-        super(n, g);
+    public BaseLevelScreen(int n, int g, JaxGame jg) {
+        super(n,g,jg);
     }
 
     @Override
     public void initialize() {
-        tma = new TilemapActor("Level1Map/"+MainGameValues.maps[levelNumber], mainStage);
+
+        tma = new TilemapActor(MainGameValues.maps[levelNumber], mainStage);
 
         for(MapObject obj : tma.getRectangleList("Solid")){
             MapProperties props = obj.getProperties();
@@ -135,16 +138,16 @@ public class BaseLevelScreen extends BaseScreen {
         staminaBar = createProgressBar(Color.GRAY, Color.BLUE);
 
 
-// healthBar.setBounds(10,10,500,20);
+// healthBar.setBounds(10,10,500,20); slap
         Button.ButtonStyle buttonStyleRestart = new Button.ButtonStyle();
-        Texture buttonRestart = new Texture(Gdx.files.internal("restart.png"));
+        Texture buttonRestart = LoadingLevelsScreen.assetManagerLvl.get("restart.png",Texture.class);
         TextureRegion buttonRegionRestart = new TextureRegion(buttonRestart);
         buttonStyleRestart.up = new TextureRegionDrawable(buttonRegionRestart);
 
-        crystalCollectSound = Gdx.audio.newSound(Gdx.files.internal("crystalCollectSound.mp3"));
-        firstAidKitSound = Gdx.audio.newSound(Gdx.files.internal("firstAidKitSound.mp3"));
-        jumpSound = Gdx.audio.newSound(Gdx.files.internal("jumpSound.mp3"));
-        whatSound = Gdx.audio.newSound(Gdx.files.internal("whatSound.mp3"));
+        crystalCollectSound = LoadingLevelsScreen.assetManagerLvl.get("crystalCollectSound.mp3",Sound.class);
+        firstAidKitSound = LoadingLevelsScreen.assetManagerLvl.get("firstAidKitSound.mp3",Sound.class);
+        jumpSound = LoadingLevelsScreen.assetManagerLvl.get("jumpSound.mp3",Sound.class);
+        whatSound = LoadingLevelsScreen.assetManagerLvl.get("whatSound.mp3",Sound.class);
 
         healthLabel= new Label("Health: ", BaseGame.labelStyle);
 
@@ -156,7 +159,7 @@ public class BaseLevelScreen extends BaseScreen {
                 if (!isTouchDownEvent(e)){
                     return false;
                 }
-                BaseGame.setActiveScreen(new BaseLevelScreen(levelNumber, goalNumber));
+                BaseGame.setActiveScreen(new LoadingLevelsScreen(levelNumber, goalNumber,jg));
                 ost.dispose();
                 return false;
             }
@@ -192,7 +195,7 @@ public class BaseLevelScreen extends BaseScreen {
                 if (!isTouchDownEvent(e)){
                     return false;
                 }
-                BaseGame.setActiveScreen(new MenuScreen());
+                BaseGame.setActiveScreen(new MenuScreen(jg));
                 ost.dispose();
                 return false;
             }
@@ -251,9 +254,10 @@ public class BaseLevelScreen extends BaseScreen {
                 break;
         }
 
+        audioVolume = 1;
 
-        bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
-        ost = Gdx.audio.newMusic(Gdx.files.internal("ost.mp3"));
+        bruh = LoadingLevelsScreen.assetManagerLvl.get("bruh1.mp3",Sound.class);
+        ost = LoadingLevelsScreen.assetManagerLvl.get("ost.mp3",Music.class);
         ost.setLooping(true);
         ost.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
         ost.play();
@@ -437,9 +441,9 @@ public class BaseLevelScreen extends BaseScreen {
         for(BaseActor b : BaseActor.getList(mainStage, "Teleport")){
             if(jax.overlaps(b) && goal){
                 if(levelNumber+1 == MainGameValues.maps.length){
-                    BaseGame.setActiveScreen(new MenuScreen());
+                    BaseGame.setActiveScreen(new MenuScreen(jg));
                 } else {
-                    BaseGame.setActiveScreen(new BaseLevelScreen(levelNumber + 1, MainGameValues.getGoal(levelNumber)));
+                    BaseGame.setActiveScreen(new LoadingLevelsScreen(levelNumber + 1, MainGameValues.getGoal(levelNumber),jg));
                 }
                 ost.dispose();
             } else if(jax.overlaps(b) && !goal){

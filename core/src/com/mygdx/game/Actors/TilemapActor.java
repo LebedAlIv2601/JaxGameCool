@@ -19,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Actors.BaseActor;
+import com.mygdx.game.Screens.LoadingLevelsScreen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,13 +40,8 @@ public class TilemapActor extends Actor {
 //    private float unitScale;
 
     public TilemapActor(String filename, Stage theStage){
-//        tiledMap = new TmxMapLoader().load(filename);
 
-        assetManager = new AssetManager();
-        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        assetManager.load(filename, TiledMap.class);
-        assetManager.finishLoading();
-        tiledMap = assetManager.get(filename);
+        tiledMap = LoadingLevelsScreen.assetManagerLvl.get("Level1Map/" + filename,TiledMap.class);
 
         int tileWidth  = (int)tiledMap.getProperties().get("tilewidth");
         int tileHeight = (int)tiledMap.getProperties().get("tileheight");

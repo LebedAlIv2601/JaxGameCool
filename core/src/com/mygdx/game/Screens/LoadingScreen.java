@@ -20,14 +20,11 @@ import java.awt.Font;
 
 public class LoadingScreen extends BaseScreen implements Screen {
 
-    private final JaxGame jg;
-
     private ShapeRenderer shapeRenderer;
     private float progress;
 
-    public LoadingScreen(final JaxGame jg){
-        super(0,0);
-        this.jg = jg;
+    public LoadingScreen( JaxGame jg){
+        super(0,0, jg);
         this.shapeRenderer = new ShapeRenderer();
     }
 
@@ -97,38 +94,6 @@ public class LoadingScreen extends BaseScreen implements Screen {
         jg.assetManager.load("Splash/back.png", Texture.class);
         jg.assetManager.load("Splash/logo.png", Texture.class);
         jg.assetManager.load("Splash/flow.png", Texture.class);
-        jg.assetManager.load("Level1Map/fire.png", Texture.class);
-        jg.assetManager.load("Level1Map/Level1TileSet.png", Texture.class);
-        jg.assetManager.load("1.png", Texture.class);
-        jg.assetManager.load("2.png", Texture.class);
-        jg.assetManager.load("3.png", Texture.class);
-        jg.assetManager.load("4.png", Texture.class);
-        jg.assetManager.load("5.png", Texture.class);
-        jg.assetManager.load("1going.png", Texture.class);
-        jg.assetManager.load("2going.png", Texture.class);
-        jg.assetManager.load("3going.png", Texture.class);
-        jg.assetManager.load("4going.png", Texture.class);
-        jg.assetManager.load("5going.png", Texture.class);
-        jg.assetManager.load("bruh1.mp3", Sound.class);
-        jg.assetManager.load("buttonClickSound.mp3", Sound.class);
-        jg.assetManager.load("button.png", Texture.class);
-        jg.assetManager.load("cooper.fnt", BitmapFont.class);
-        jg.assetManager.load("cooper.png", Texture.class);
-        jg.assetManager.load("emenyHit.png", Texture.class);
-        jg.assetManager.load("emenySt1.png", Texture.class);
-        jg.assetManager.load("enemySt2.png", Texture.class);
-        jg.assetManager.load("flag1.png", Texture.class);
-        jg.assetManager.load("flag2.png", Texture.class);
-        jg.assetManager.load("jump1.png", Texture.class);
-        jg.assetManager.load("jump2.png", Texture.class);
-        jg.assetManager.load("jump3.png", Texture.class);
-        jg.assetManager.load("loseMessage.png", Texture.class);
-        jg.assetManager.load("restart.png", Texture.class);
-        jg.assetManager.load("Staying.png", Texture.class);
-        jg.assetManager.load("trava1.png", Texture.class);
-        jg.assetManager.load("trava2.png", Texture.class);
-        jg.assetManager.load("ost.mp3", Music.class);
-        jg.assetManager.load("menuOst.mp3", Music.class);
         jg.assetManager.load("Splash/Light.png",Texture.class);
         jg.assetManager.load("Splash/splashINTRO.mp3",Music.class);
         jg.assetManager.load("Menu/menuBack.png",Texture.class);
@@ -138,5 +103,8 @@ public class LoadingScreen extends BaseScreen implements Screen {
         jg.assetManager.load("Menu/quitButton.png",Texture.class);
         jg.assetManager.load("Menu/settingsButton.png",Texture.class);
         jg.assetManager.load("Menu/startButton.png",Texture.class);
+        jg.assetManager.load("menuOst.mp3",Music.class);
+        jg.assetManager.load("buttonClickSound.mp3",Sound.class);
+        jg.assetManager.finishLoading();
     }
 }

@@ -26,8 +26,6 @@ import static com.mygdx.game.BaseGame.setActiveScreen;
 
 
 public class SplashScreen extends BaseScreen implements Screen {
-
-    private final JaxGame jg;
     private Stage stageSplash;
 
     private Image splashImage;
@@ -36,9 +34,8 @@ public class SplashScreen extends BaseScreen implements Screen {
     private Image splashLight;
     private Music intro;
 
-    public SplashScreen (final JaxGame jg){
-        super(0,0);
-        this.jg = jg;
+    public SplashScreen ( JaxGame jg){
+        super(0,0,jg);
         this.stageSplash = new Stage(new FillViewport(TilemapActor.windowWidth,TilemapActor.windowHeight,jg.cameraSplash));
     }
 
@@ -49,17 +46,17 @@ public class SplashScreen extends BaseScreen implements Screen {
         Runnable transition = new Runnable() {
             @Override
             public void run() {
-                setActiveScreen(new MenuScreen());
+                jg.setScreen(new MenuScreen(jg));
             }
         };
 
         Texture splashBackTexture = jg.assetManager.get("Splash/back.png",Texture.class);
         splashBack = new Image(splashBackTexture);
 
-        Texture splashTextureFlow = jg.assetManager.get("Splash/flow.png");
+        Texture splashTextureFlow = jg.assetManager.get("Splash/flow.png",Texture.class);
         splashFlow = new Image(splashTextureFlow);
 
-        Texture splashTexture = jg.assetManager.get("Splash/logo.png",Texture.class);
+        Texture splashTexture = jg.assetManager.get("Splash/logo.png", Texture.class);
         splashImage = new Image(splashTexture);
         splashImage.setOrigin(splashImage.getWidth()/2,splashImage.getHeight()/2);
 
@@ -159,7 +156,7 @@ public class SplashScreen extends BaseScreen implements Screen {
     }
 
     public void intro(){
-        intro = Gdx.audio.newMusic(Gdx.files.internal("Splash/splashINTRO.mp3"));
+        intro = jg.assetManager.get("Splash/splashINTRO.mp3",Music.class);
         intro.setLooping(false);
         intro.play();
     }

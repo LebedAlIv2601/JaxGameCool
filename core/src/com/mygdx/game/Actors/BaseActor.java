@@ -20,6 +20,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.BaseGame;
 import com.mygdx.game.Screens.BaseLevelScreen;
+import com.mygdx.game.Screens.BaseLevelScreen;
+import com.mygdx.game.Screens.LoadingLevelsScreen;
 
 import java.util.ArrayList;
 
@@ -113,7 +115,7 @@ public class BaseActor extends Group {
 
         for(int i = 0; i< fileCount; i++){
             String fileName = fileNames[i];
-            Texture texture = new Texture(Gdx.files.internal(fileName));
+            Texture texture = LoadingLevelsScreen.assetManagerLvl.get(fileName,Texture.class);
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             textureArray.add(new TextureRegion(texture));
         }
