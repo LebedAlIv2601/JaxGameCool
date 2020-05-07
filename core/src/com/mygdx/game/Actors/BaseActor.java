@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.BaseGame;
+import com.mygdx.game.Screens.BaseLevelScreen;
 
 import java.util.ArrayList;
 
@@ -377,18 +379,18 @@ public class BaseActor extends Group {
     }
 
     public void physicsApply(float dt){
-        accelerationVec.add(0,-gravity);
-        velocityVec.add(accelerationVec.x*dt, accelerationVec.y*dt);
+            accelerationVec.add(0, -gravity);
+            velocityVec.add(accelerationVec.x * dt, accelerationVec.y * dt);
 
-        velocityVec.x = MathUtils.clamp(velocityVec.x, -maxHorizontalSpeed, maxHorizontalSpeed);
-        velocityVec.y = MathUtils.clamp(velocityVec.y, -maxVerticalSpeed, maxVerticalSpeed);
-        moveBy(velocityVec.x*dt, velocityVec.y*dt);
-        accelerationVec.set(0,0);
-        if(velocityVec.x>0){
-            flip = false;
-        } else if (velocityVec.x<0){
-            flip = true;
-        }
+            velocityVec.x = MathUtils.clamp(velocityVec.x, -maxHorizontalSpeed, maxHorizontalSpeed);
+            velocityVec.y = MathUtils.clamp(velocityVec.y, -maxVerticalSpeed, maxVerticalSpeed);
+            moveBy(velocityVec.x * dt, velocityVec.y * dt);
+            accelerationVec.set(0, 0);
+            if (velocityVec.x > 0) {
+                flip = false;
+            } else if (velocityVec.x < 0) {
+                flip = true;
+            }
     }
 
     public float getHealth(){
@@ -430,7 +432,7 @@ public class BaseActor extends Group {
 
     public void death(){
         if(!soundPlayedFlag) {
-            bruh.play();
+            bruh.play(BaseGame.prefs.getFloat("SoundVolume"));
             soundPlayedFlag = true;
         }
         dead = true;

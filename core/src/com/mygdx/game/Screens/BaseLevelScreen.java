@@ -36,6 +36,8 @@ import com.mygdx.game.BaseGame;
 import com.mygdx.game.MainGameValues;
 import com.mygdx.game.Actors.StickEnemy;
 
+import java.util.Iterator;
+
 
 public class BaseLevelScreen extends BaseScreen {
     private Jax jax;
@@ -57,7 +59,6 @@ public class BaseLevelScreen extends BaseScreen {
     private Sound whatSound;
     private Music ost;
     private boolean flag;
-    private float audioVolume;
     private TilemapActor tma;
     private boolean goal;
     private boolean allCollected;
@@ -67,6 +68,7 @@ public class BaseLevelScreen extends BaseScreen {
     private TextButton jumpButton;
     private boolean sayWhat;
     public boolean zeroStamina;
+    private Label healthLabel;
 
     public BaseLevelScreen(int n, int g) {
         super(n, g);
@@ -144,6 +146,8 @@ public class BaseLevelScreen extends BaseScreen {
         jumpSound = Gdx.audio.newSound(Gdx.files.internal("jumpSound.mp3"));
         whatSound = Gdx.audio.newSound(Gdx.files.internal("whatSound.mp3"));
 
+        healthLabel= new Label("Health: ", BaseGame.labelStyle);
+
         Button restartButton = new Button(buttonStyleRestart);
 
         restartButton.addListener(new EventListener() {
@@ -168,7 +172,7 @@ public class BaseLevelScreen extends BaseScreen {
                     return false;
                 }
                 if (jax.isOnSolid()) {
-                    jumpSound.play();
+                    jumpSound.play(BaseGame.prefs.getFloat("SoundVolume"));
                     jax.jump();
                 }
                 return false;
@@ -223,6 +227,7 @@ public class BaseLevelScreen extends BaseScreen {
         uiTable.pad(10);
         uiTable.add(healthBar).top().colspan(1);
         uiTable.add(staminaBar).padLeft(10).top().colspan(1);
+        uiTable.add(healthLabel).padLeft(10).top().colspan(1);
         uiTable.add().expandX().expandY();
         uiTable.add(menuButton).top().right();
         uiTable.add(restartButton).top().right();
@@ -246,12 +251,11 @@ public class BaseLevelScreen extends BaseScreen {
                 break;
         }
 
-        audioVolume = 1;
 
         bruh = Gdx.audio.newSound(Gdx.files.internal("bruh1.mp3"));
         ost = Gdx.audio.newMusic(Gdx.files.internal("ost.mp3"));
         ost.setLooping(true);
-        ost.setVolume(audioVolume/3);
+        ost.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
         ost.play();
         flag = true;
         allCollected = false;
@@ -262,6 +266,8 @@ public class BaseLevelScreen extends BaseScreen {
 
     @Override
     public void update(float dt){
+
+        ost.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
 
         if(leftButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.A)){
             jax.addVelocityVec(-1);
@@ -277,7 +283,7 @@ public class BaseLevelScreen extends BaseScreen {
         } else {
             jax.setHitting(false);
             if(!attackButton.isPressed()) {
-                jax.setStamina(0.3f);
+                jax.setStamina(0.2f);
             }
         }
 
@@ -311,8 +317,9 @@ public class BaseLevelScreen extends BaseScreen {
         overlapSign();
         overlapStairs();
         controlZeroStamina();
-        healthBar.setValue(jax.getHealth()/ MainGameValues.jaxHealth);
-        staminaBar.setValue(jax.getStamina()/MainGameValues.jaxStamina);
+        healthBar.setValue(jax.getHealth()/ BaseGame.prefs.getFloat("Health"));
+        staminaBar.setValue(jax.getStamina()/BaseGame.prefs.getFloat("Stamina"));
+        healthLabel.setText("Health: "+ BaseGame.prefs.getFloat("Health"));
 
     }
 
@@ -346,7 +353,7 @@ public class BaseLevelScreen extends BaseScreen {
         for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")){
             if(jax.overlaps(b) && jax.isHitting()){
                 StickEnemy st = (StickEnemy) b;
-                st.setHealth(jax.getDamage());
+                st.setHealth(-BaseGame.prefs.getFloat("Damage"));
             }
         }
     }
@@ -397,7 +404,7 @@ public class BaseLevelScreen extends BaseScreen {
                 Crystal cr = (Crystal)b;
                 cr.clearActions();
                 cr.addAction(Actions.removeActor());
-                crystalCollectSound.play();
+                crystalCollectSound.play(BaseGame.prefs.getFloat("SoundVolume"));
             }
         }
     }
@@ -420,7 +427,7 @@ public class BaseLevelScreen extends BaseScreen {
                 FirstAidKit fak = (FirstAidKit) b;
                 fak.clearActions();
                 fak.addAction(Actions.removeActor());
-                firstAidKitSound.play();
+                firstAidKitSound.play(BaseGame.prefs.getFloat("SoundVolume"));
                 jax.setHealth(50);
             }
         }
@@ -437,7 +444,7 @@ public class BaseLevelScreen extends BaseScreen {
                 ost.dispose();
             } else if(jax.overlaps(b) && !goal){
                 if(!sayWhat){
-                    whatSound.play();
+                    whatSound.play(BaseGame.prefs.getFloat("SoundVolume"));
                     sayWhat = true;
                 }
             } else {
@@ -454,6 +461,10 @@ public class BaseLevelScreen extends BaseScreen {
             boolean nearby = jax.isWithinDistance(4, sign);
             if(nearby && !sign.isViewing()){
                 dialogBox.setText(sign.getText());
+                if(!sayWhat){
+                    whatSound.play(BaseGame.prefs.getFloat("SoundVolume"));
+                    sayWhat = true;
+                }
                 dialogBox.setVisible(true);
                 sign.setViewing(true);
             }
@@ -462,6 +473,7 @@ public class BaseLevelScreen extends BaseScreen {
                 dialogBox.setText(" ");
                 dialogBox.setVisible(false);
                 sign.setViewing(false);
+                sayWhat = false;
             }
         }
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.BaseGame;
 import com.mygdx.game.JaxGame;
@@ -24,7 +25,8 @@ public class ChooseLevelScreen extends BaseScreen {
     private ArrayList<TextButton> lvlButtons;
     private Image menuTree;
     private Image menuBack;
-    private int n;
+    private TextButton menuButton;
+    private Label chooseLabel;
 
     public ChooseLevelScreen() {
         super(0, 0);
@@ -49,12 +51,36 @@ public class ChooseLevelScreen extends BaseScreen {
         mainStage.addActor(menuBack);
         mainStage.addActor(menuTree);
 
+        menuButton = new TextButton("Menu", BaseGame.textButtonStyle);
+
+        menuButton.addListener(new EventListener() {
+            @Override
+
+            public boolean handle(Event e) {
+                if (!isTouchDownEvent(e)){
+                    return false;
+                }
+                BaseGame.setActiveScreen(new MenuScreen());
+                MenuScreen.disposeOst();
+                return false;
+            }
+        });
+
+        chooseLabel = new Label("Choose Level", BaseGame.labelStyle);
+        chooseLabel.setFontScale(2);
+
         lvlButtons = new ArrayList<TextButton>();
         uiTable.pad(20);
+        uiTable.add(menuButton).top().left().colspan(2).padBottom(30);
+        uiTable.add(chooseLabel).top().center().colspan(5).padBottom(30);
+        uiTable.add().expandX();
+        uiTable.row();
         for(int i = 0; i< MainGameValues.maps.length; i++){
             createNextButton(i);
         }
         uiTable.add().expandX().expandY();
+
+
     }
 
     @Override

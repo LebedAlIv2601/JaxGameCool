@@ -49,9 +49,24 @@ public class MenuScreen extends BaseScreen implements Screen {
 
 
 
+//    @Override
+//    public void show() {
+//        super.show();
+//
+//    }
+
+
     @Override
-    public void show() {
-        super.show();
+    public void initialize() {
+        buttonClickSound = Gdx.audio.newSound(Gdx.files.internal("buttonClickSound.mp3"));
+
+        menuOst = Gdx.audio.newMusic(Gdx.files.internal("menuOst.mp3"));
+        menuOst.setLooping(true);
+        menuOst.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
+        menuOst.play();
+        camMenu = new OrthographicCamera();
+        camMenu.setToOrtho(false,mainStage.getWidth(),mainStage.getHeight());
+
 
         Texture menuLogoTexture = new Texture("Menu/menuLogo.png");
         menuLogo = new Image(menuLogoTexture);
@@ -79,10 +94,10 @@ public class MenuScreen extends BaseScreen implements Screen {
         menuLogo.addAction(forever(sequence((alpha(0f)),scaleTo(1f,1f),
                 parallel(fadeIn(5f, Interpolation.pow3),
                         moveTo(mainStage.getWidth()/2 - 279,mainStage.getHeight()/2 + 100,5f,Interpolation.swing)),
-                        delay(5f),
-                        parallel(fadeOut(1f),
+                delay(5f),
+                parallel(fadeOut(1f),
                         moveTo(-560,mainStage.getHeight()/2 + 100,2f,Interpolation.swing)),
-                        moveTo(mainStage.getWidth(),mainStage.getHeight()/2 + 100))));
+                moveTo(mainStage.getWidth(),mainStage.getHeight()/2 + 100))));
 
         startButton.setPosition(mainStage.getWidth()/2-150,mainStage.getHeight()/2);
         startButton.setSize(300,100);
@@ -125,20 +140,6 @@ public class MenuScreen extends BaseScreen implements Screen {
     }
 
 
-    @Override
-    public void initialize() {
-        buttonClickSound = Gdx.audio.newSound(Gdx.files.internal("buttonClickSound.mp3"));
-        audioVolume = 1;
-
-        menuOst = Gdx.audio.newMusic(Gdx.files.internal("menuOst.mp3"));
-        menuOst.setLooping(true);
-        menuOst.setVolume(audioVolume/3);
-        menuOst.play();
-        camMenu = new OrthographicCamera();
-        camMenu.setToOrtho(false,mainStage.getWidth(),mainStage.getHeight());
-    }
-
-
     public void handleInput(){
 
         if(Gdx.input.isTouched()){
@@ -150,7 +151,7 @@ public class MenuScreen extends BaseScreen implements Screen {
                 JaxGame.setActiveScreen(new ChooseLevelScreen());
             }
             if(isButtonTouch(settingsButton)){
-                Gdx.app.exit();
+                JaxGame.setActiveScreen(new SettingsScreen());
             }
             if(isButtonTouch(quitButton)){
                 Gdx.app.exit();
@@ -160,10 +161,8 @@ public class MenuScreen extends BaseScreen implements Screen {
 
     @Override
     public void update(float dt) {
+        changeSoundOst();
         camMenu.update();
-
-
-
         handleInput();
     }
 
@@ -175,7 +174,7 @@ public class MenuScreen extends BaseScreen implements Screen {
                 menuTouch.x < b.getX()+b.getWidth() &&
                 menuTouch.y < b.getY()+b.getHeight() &&
                 menuTouch.y > b.getY() ){
-            buttonClickSound.play();
+            buttonClickSound.play(BaseGame.prefs.getFloat("SoundVolume"));
             return true;
         } else{
             return false;
@@ -183,6 +182,9 @@ public class MenuScreen extends BaseScreen implements Screen {
     }
     public static void disposeOst(){
         menuOst.dispose();
+    }
+    public static void changeSoundOst(){
+        menuOst.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
     }
 
 }

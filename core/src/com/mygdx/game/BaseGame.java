@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,6 +20,8 @@ public abstract class BaseGame extends Game {
     private static BaseGame game;
     public static LabelStyle labelStyle;
     public static TextButtonStyle textButtonStyle;
+
+    public static Preferences prefs;
 
 
     public BaseGame(){
@@ -37,6 +40,26 @@ public abstract class BaseGame extends Game {
         textButtonStyle.up = new NinePatchDrawable(buttonPath);
         textButtonStyle.font = new BitmapFont(Gdx.files.internal("jokerman.fnt"));
         textButtonStyle.fontColor = Color.GOLD;
+
+        prefs = Gdx.app.getPreferences("prefs");
+        if(!prefs.contains("Exp")){
+            prefs.putInteger("Exp", 0);
+        }
+        if(!prefs.contains("Health")){
+            prefs.putFloat("Health", 100);
+        }
+        if(!prefs.contains("Stamina")){
+            prefs.putFloat("Stamina", 100);
+        }
+        if(!prefs.contains("Damage")){
+            prefs.putFloat("Damage", 2f);
+        }
+        if(!prefs.contains("MusicVolume")){
+            prefs.putFloat("MusicVolume", 1);
+        }
+        if(!prefs.contains("SoundVolume")){
+            prefs.putFloat("SoundVolume", 1);
+        }
 
     }
 

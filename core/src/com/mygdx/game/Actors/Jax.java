@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Actors.BaseActor;
 import com.mygdx.game.Actors.Solid;
+import com.mygdx.game.BaseGame;
 import com.mygdx.game.MainGameValues;
 
 public class Jax extends BaseActor{
@@ -24,6 +25,7 @@ public class Jax extends BaseActor{
     private boolean stairsOverlap;
     private Sound deathSound;
     private float stamina;
+    private int exp;
 
 
 
@@ -45,9 +47,9 @@ public class Jax extends BaseActor{
         jumpSpeed = 450;
         climbSpeed = 200;
         stairsOverlap = false;
-        setHealth(MainGameValues.jaxHealth);
-        setStamina(MainGameValues.jaxStamina);
-        setDamage(5f);
+        setHealth(BaseGame.prefs.getFloat("Health"));
+        setStamina(BaseGame.prefs.getFloat("Stamina"));
+        setDamage(BaseGame.prefs.getFloat("Damage"));
 
         setBoundaryPolygon(8);
         belowSensor = new BaseActor(0,0,s);
@@ -93,7 +95,7 @@ public class Jax extends BaseActor{
 
     public void death() {
         if(!soundPlayedFlag) {
-            deathSound.play();
+            deathSound.play(BaseGame.prefs.getFloat("SoundVolume"));
             soundPlayedFlag = true;
         }
         dead = true;
@@ -136,5 +138,11 @@ public class Jax extends BaseActor{
     }
     public float getStamina(){
         return stamina;
+    }
+    public void setExp(int s){
+        exp+=s;
+    }
+    public float getExp(){
+        return exp;
     }
 }

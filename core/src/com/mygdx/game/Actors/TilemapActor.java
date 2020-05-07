@@ -1,6 +1,8 @@
 package com.mygdx.game.Actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Actors.BaseActor;
@@ -21,15 +24,28 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class TilemapActor extends Actor {
+//    public static int windowHeight = 100;
+//    public static int windowWidth = Gdx.graphics.getWidth()/(Gdx.graphics.getHeight()/windowHeight);
+
     public static int windowWidth = Gdx.graphics.getWidth();
     public static int windowHeight = Gdx.graphics.getHeight();
+
+
 
     private TiledMap tiledMap;
     private OrthographicCamera tiledCamera;
     private OrthoCachedTiledMapRenderer tiledMapRenderer;
+    private AssetManager assetManager;
+//    private float unitScale;
 
     public TilemapActor(String filename, Stage theStage){
-        tiledMap = new TmxMapLoader().load(filename);
+//        tiledMap = new TmxMapLoader().load(filename);
+
+        assetManager = new AssetManager();
+        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+        assetManager.load(filename, TiledMap.class);
+        assetManager.finishLoading();
+        tiledMap = assetManager.get(filename);
 
         int tileWidth  = (int)tiledMap.getProperties().get("tilewidth");
         int tileHeight = (int)tiledMap.getProperties().get("tileheight");
@@ -39,6 +55,8 @@ public class TilemapActor extends Actor {
         int mapHeight = tileHeight*numTilesVertical;
 
         BaseActor.setWorldBounds(mapWidth,mapHeight);
+
+//        unitScale = 1f / 100f;
 
         tiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap);
         tiledMapRenderer.setBlending(true);
@@ -57,6 +75,7 @@ public class TilemapActor extends Actor {
         Camera mainCamera = getStage().getCamera();
         tiledCamera.position.x = mainCamera.position.x;
         tiledCamera.position.y = mainCamera.position.y;
+//        tiledCamera.zoom = 2;
         tiledCamera.update();
         tiledMapRenderer.setView(tiledCamera);
         batch.end();
