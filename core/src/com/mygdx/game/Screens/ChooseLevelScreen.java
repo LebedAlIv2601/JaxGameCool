@@ -60,8 +60,8 @@ public class ChooseLevelScreen extends BaseScreen {
                 if (!isTouchDownEvent(e)){
                     return false;
                 }
-                BaseGame.setActiveScreen(new MenuScreen());
-                MenuScreen.disposeOst();
+                BaseGame.setActiveScreen(new MenuScreen(jg));
+//                MenuScreen.disposeOst();
                 return false;
             }
         });
@@ -97,13 +97,7 @@ public class ChooseLevelScreen extends BaseScreen {
                 if (!isTouchDownEvent(e)){
                     return false;
                 }
-                int gn;
-                if(num == 0){
-                    gn = 0;
-                } else {
-                    gn = MainGameValues.getGoal(num - 1);
-                }
-                JaxGame.setActiveScreen(new LoadingLevelsScreen(num,gn,jg));
+                JaxGame.setActiveScreen(new LoadingLevelsScreen(num,MainGameValues.getGoal(num),jg));
                 //slap
                 MenuScreen.disposeOst();
                 return false;

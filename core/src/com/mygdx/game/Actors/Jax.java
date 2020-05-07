@@ -133,6 +133,9 @@ public class Jax extends BaseActor{
     public void climb(){
         velocityVec.y = climbSpeed;
     }
+    public void climbDown(){
+        velocityVec.y = -climbSpeed;
+    }
     public void setStamina(float s){
         stamina += s;
     }

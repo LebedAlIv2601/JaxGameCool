@@ -51,16 +51,18 @@ public class MenuScreen extends BaseScreen implements Screen {
         super(0,0,jg);
     }
 
-//    @Override
-//    public void show() {
-//        super.show();
-//
-//    }
-
-
     @Override
-    public void show() {
-        super.show();
+    public void initialize() {
+        buttonClickSound = jg.assetManager.get("buttonClickSound.mp3",Sound.class);
+        audioVolume = 1;
+
+
+        menuOst = jg.assetManager.get("menuOst.mp3",Music.class);
+        menuOst.setLooping(true);
+        menuOst.setVolume(audioVolume/3);
+        menuOst.play();
+        camMenu = new OrthographicCamera();
+        camMenu.setToOrtho(false,mainStage.getWidth(),mainStage.getHeight());
 
 
         Texture menuLogoTexture = jg.assetManager.get("Menu/menuLogo.png",Texture.class);
@@ -135,34 +137,18 @@ public class MenuScreen extends BaseScreen implements Screen {
     }
 
 
-    @Override
-    public void initialize() {
-        buttonClickSound = jg.assetManager.get("buttonClickSound.mp3",Sound.class);
-        audioVolume = 1;
-
-
-        menuOst = jg.assetManager.get("menuOst.mp3",Music.class);
-        menuOst.setLooping(true);
-        menuOst.setVolume(audioVolume/3);
-        menuOst.play();
-        camMenu = new OrthographicCamera();
-        camMenu.setToOrtho(false,mainStage.getWidth(),mainStage.getHeight());
-
-
-    }
-
-
     public void handleInput(){
 
         if(Gdx.input.isTouched()){
             if(isButtonTouch(startButton)){
                 JaxGame.setActiveScreen(new LoadingLevelsScreen(0,0,jg));
+                disposeOst();
             }
             if(isButtonTouch(levelsButton)){
                 JaxGame.setActiveScreen(new ChooseLevelScreen(jg));
             }
             if(isButtonTouch(settingsButton)){
-                JaxGame.setActiveScreen(new SettingsScreen());
+                JaxGame.setActiveScreen(new SettingsScreen(jg));
             }
             if(isButtonTouch(quitButton)){
                 Gdx.app.exit();

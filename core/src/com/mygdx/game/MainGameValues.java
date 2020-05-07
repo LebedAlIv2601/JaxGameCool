@@ -19,7 +19,7 @@ public class MainGameValues {
 
 
 
-    public static String[] enemyStand = {"EnemySt1.png"};
+    public static String[] enemyStand = {"EnemySt1.png", "EnemySt2.png"};
     public static String[] enemyWalk = {"runEnemy1.png", "runEnemy2.png", "runEnemy3.png", "runEnemy4.png"};
     public static String[] enemyHit = {"enemyHit.png", "EnemySt1.png"};
 
@@ -36,10 +36,16 @@ public class MainGameValues {
         int g;
         switch (n) {
             case 0:
-                g = 1;
+                g = 0;
                 break;
             case 1:
                 g = 0;
+                break;
+            case 2:
+                g = 1;
+                break;
+            case 3:
+                g = 1;
                 break;
             default:
                 g = 0;

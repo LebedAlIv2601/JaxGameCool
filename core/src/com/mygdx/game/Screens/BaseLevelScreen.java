@@ -233,15 +233,20 @@ public class BaseLevelScreen extends BaseScreen {
         uiTable.add(healthLabel).padLeft(10).top().colspan(1);
         uiTable.add().expandX().expandY();
         uiTable.add(menuButton).top().right();
-        uiTable.add(restartButton).top().right();
+        uiTable.add(restartButton).top().padLeft(20).right();
         uiTable.row();
-        uiTable.add(climbButton).expandY().bottom().colspan(2);
+        uiTable.add().expandY();
         uiTable.row();
-        uiTable.add(leftButton).bottom();
-        uiTable.add(rightButton).bottom();
+        uiTable.add().colspan(4);
         uiTable.add().expandX().expandY();
-        uiTable.add(attackButton).bottom();
-        uiTable.add(jumpButton).bottom();
+        uiTable.add(climbButton).bottom().right().colspan(1);
+        uiTable.row();
+        uiTable.add(leftButton).bottom().colspan(1);
+        uiTable.add(rightButton).bottom().colspan(1);
+        uiTable.add().colspan(1);
+        uiTable.add().expandX().expandY();
+        uiTable.add(attackButton).bottom().right();
+        uiTable.add(jumpButton).bottom().right();
 
         switch(goalNumber){
             case 0:
@@ -299,7 +304,8 @@ public class BaseLevelScreen extends BaseScreen {
                 jax.velocityVec.y = 0;
                 zeroClimbFlag = true;
             }
-            jax.setGravity(200);
+            jax.climbDown();
+            jax.setGravity(0);
         } else {
             jax.setGravity(700);
             zeroClimbFlag = false;
@@ -443,7 +449,7 @@ public class BaseLevelScreen extends BaseScreen {
                 if(levelNumber+1 == MainGameValues.maps.length){
                     BaseGame.setActiveScreen(new MenuScreen(jg));
                 } else {
-                    BaseGame.setActiveScreen(new LoadingLevelsScreen(levelNumber + 1, MainGameValues.getGoal(levelNumber),jg));
+                    BaseGame.setActiveScreen(new LoadingLevelsScreen(levelNumber + 1, MainGameValues.getGoal(levelNumber+1),jg));
                 }
                 ost.dispose();
             } else if(jax.overlaps(b) && !goal){

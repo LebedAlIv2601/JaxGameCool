@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.BaseGame;
+import com.mygdx.game.JaxGame;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
@@ -36,8 +37,8 @@ public class SettingsScreen extends BaseScreen{
     private Pixmap pixmap;
     private TextureRegionDrawable drawable;
 
-    public SettingsScreen() {
-        super(0, 0);
+    public SettingsScreen(JaxGame jg) {
+        super(0, 0, jg);
     }
 
     @Override
@@ -77,8 +78,8 @@ public class SettingsScreen extends BaseScreen{
                 if (!isTouchDownEvent(e)){
                     return false;
                 }
-                BaseGame.setActiveScreen(new MenuScreen());
-                MenuScreen.disposeOst();
+                BaseGame.setActiveScreen(new MenuScreen(jg));
+//                MenuScreen.disposeOst();
                 return false;
             }
         });
