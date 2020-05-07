@@ -26,11 +26,13 @@ import com.mygdx.game.Actors.TilemapActor;
 import com.mygdx.game.BaseGame;
 import com.mygdx.game.JaxGame;
 import com.mygdx.game.MainGameValues;
+import com.sun.corba.se.impl.orb.ParserTable;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 
 public class MenuScreen extends BaseScreen implements Screen {
+
     private Image startButton;
     private Image menuBack;
     private Image levelsButton;
@@ -43,35 +45,35 @@ public class MenuScreen extends BaseScreen implements Screen {
     private float audioVolume;
     private Sound buttonClickSound;
 
-    public MenuScreen() {
-        super(0, 0);
+
+
+    public  MenuScreen ( JaxGame jg){
+        super(0,0,jg);
     }
-
-
 
     @Override
     public void show() {
         super.show();
 
-        Texture menuLogoTexture = new Texture("Menu/menuLogo.png");
+        Texture menuLogoTexture = jg.assetManager.get("Menu/menuLogo.png",Texture.class);
         menuLogo = new Image(menuLogoTexture);
 
-        Texture startButtonTexture = new Texture("Menu/startButton.png");
+        Texture startButtonTexture = jg.assetManager.get("Menu/startButton.png",Texture.class);
         startButton = new Image(startButtonTexture);
 
-        Texture levelsButtonTexture = new Texture("Menu/levelsButton.png");
+        Texture levelsButtonTexture = jg.assetManager.get("Menu/levelsButton.png", Texture.class);
         levelsButton = new Image(levelsButtonTexture);
 
-        Texture menuBackTexture = new Texture("Menu/menuBack.png");
+        Texture menuBackTexture = jg.assetManager.get("Menu/menuBack.png",Texture.class);
         menuBack = new Image(menuBackTexture);
 
-        Texture settingsButtonTexture = new Texture("Menu/settingsButton.png");
+        Texture settingsButtonTexture = jg.assetManager.get("Menu/settingsButton.png",Texture.class);
         settingsButton = new Image(settingsButtonTexture);
 
-        Texture quitButtonTexture = new Texture("Menu/quitButton.png");
+        Texture quitButtonTexture = jg.assetManager.get("Menu/quitButton.png",Texture.class);
         quitButton = new Image(quitButtonTexture);
 
-        Texture menuTreeTexture = new Texture("Menu/menuTree.png");
+        Texture menuTreeTexture = jg.assetManager.get("Menu/menuTree.png",Texture.class);
         menuTree = new Image(menuTreeTexture);
 
 
@@ -127,15 +129,18 @@ public class MenuScreen extends BaseScreen implements Screen {
 
     @Override
     public void initialize() {
-        buttonClickSound = Gdx.audio.newSound(Gdx.files.internal("buttonClickSound.mp3"));
+        buttonClickSound = jg.assetManager.get("buttonClickSound.mp3",Sound.class);
         audioVolume = 1;
 
-        menuOst = Gdx.audio.newMusic(Gdx.files.internal("menuOst.mp3"));
+
+        menuOst = jg.assetManager.get("menuOst.mp3",Music.class);
         menuOst.setLooping(true);
         menuOst.setVolume(audioVolume/3);
         menuOst.play();
         camMenu = new OrthographicCamera();
         camMenu.setToOrtho(false,mainStage.getWidth(),mainStage.getHeight());
+
+
     }
 
 
@@ -143,11 +148,10 @@ public class MenuScreen extends BaseScreen implements Screen {
 
         if(Gdx.input.isTouched()){
             if(isButtonTouch(startButton)){
-                JaxGame.setActiveScreen(new BaseLevelScreen(0,0));
-                menuOst.dispose();
+                JaxGame.setActiveScreen(new LoadingLevelsScreen(0,0,jg));
             }
             if(isButtonTouch(levelsButton)){
-                JaxGame.setActiveScreen(new ChooseLevelScreen());
+                JaxGame.setActiveScreen(new ChooseLevelScreen(jg));
             }
             if(isButtonTouch(settingsButton)){
                 Gdx.app.exit();

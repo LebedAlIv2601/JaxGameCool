@@ -26,8 +26,8 @@ public class ChooseLevelScreen extends BaseScreen {
     private Image menuBack;
     private int n;
 
-    public ChooseLevelScreen() {
-        super(0, 0);
+    public ChooseLevelScreen(JaxGame jg) {
+        super(0, 0,jg);
     }
 
     @Override
@@ -77,7 +77,8 @@ public class ChooseLevelScreen extends BaseScreen {
                 } else {
                     gn = MainGameValues.getGoal(num - 1);
                 }
-                JaxGame.setActiveScreen(new BaseLevelScreen(num, gn));
+                JaxGame.setActiveScreen(new LoadingLevelsScreen(num,gn,jg));
+                //slap
                 MenuScreen.disposeOst();
                 return false;
             }

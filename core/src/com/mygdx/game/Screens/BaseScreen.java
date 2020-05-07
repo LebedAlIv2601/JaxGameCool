@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.mygdx.game.JaxGame;
 
 
 public abstract class BaseScreen implements Screen, InputProcessor {
@@ -17,9 +18,9 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     protected Table uiTable;
     protected int levelNumber;
     protected int goalNumber;
+    protected final JaxGame jg;
 
-
-    public BaseScreen(int n, int g) {
+    public BaseScreen(int n, int g, final JaxGame jg) {
         mainStage = new Stage();
         uiStage = new Stage();
         uiTable = new Table();
@@ -27,6 +28,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         uiStage.addActor(uiTable);
         levelNumber = n;
         goalNumber = g;
+        this.jg = jg;
         initialize();
     }
 

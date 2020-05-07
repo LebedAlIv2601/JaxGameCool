@@ -32,7 +32,7 @@ public abstract class BaseGame extends Game {
         labelStyle.font = new BitmapFont(Gdx.files.internal("jokerman.fnt"));
 
         textButtonStyle = new TextButtonStyle();
-        Texture buttonTex = new Texture(Gdx.files.internal("button.png"));
+        Texture buttonTex = new Texture(Gdx.files.internal("baseButton.png"));
         NinePatch buttonPath = new NinePatch(buttonTex, 24,24,24,24);
         textButtonStyle.up = new NinePatchDrawable(buttonPath);
         textButtonStyle.font = new BitmapFont(Gdx.files.internal("jokerman.fnt"));
