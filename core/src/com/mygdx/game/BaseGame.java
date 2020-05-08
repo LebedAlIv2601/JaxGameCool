@@ -41,6 +41,8 @@ public abstract class BaseGame extends Game {
         textButtonStyle.font = new BitmapFont(Gdx.files.internal("jokerman.fnt"));
         textButtonStyle.fontColor = Color.GOLD;
 
+//      Создание preferences
+
         prefs = Gdx.app.getPreferences("prefs");
         if(!prefs.contains("Exp")){
             prefs.putInteger("Exp", 0);

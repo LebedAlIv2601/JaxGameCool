@@ -339,6 +339,8 @@ public class BaseActor extends Group {
         }
     }
 
+//  Создание и привязка камеры к вьюпорту
+
     public void alignCamera(){
         Camera cam =  this.getStage().getCamera();
         Viewport v = this.getStage().getViewport();
@@ -380,6 +382,7 @@ public class BaseActor extends Group {
         return Intersector.overlapConvexPolygons(poly1, poly2);
     }
 
+//  реализцаия физики для актеров
     public void physicsApply(float dt){
         accelerationVec.add(0, -gravity);
         velocityVec.add(accelerationVec.x * dt, accelerationVec.y * dt);

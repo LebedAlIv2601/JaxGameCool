@@ -137,9 +137,9 @@ public class SettingsScreen extends BaseScreen{
 
     @Override
     public void update(float dt) {
+//      Изменение уровня громкости
         BaseGame.prefs.putFloat("MusicVolume", musicSlider.getValue());
         BaseGame.prefs.putFloat("SoundVolume", soundSlider.getValue());
         MenuScreen.changeSoundOst();
-
     }
 }

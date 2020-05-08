@@ -78,6 +78,7 @@ public class BaseLevelScreen extends BaseScreen {
 
     @Override
     public void initialize() {
+//      Прогрузка и размещение ОБЪЕКТОВ на карте
 
         tma = new TilemapActor(MainGameValues.maps[levelNumber], mainStage);
 
@@ -133,6 +134,8 @@ public class BaseLevelScreen extends BaseScreen {
             MapProperties props = obj.getProperties();
             new StickEnemy((float)props.get("x"), (float)props.get("y"), mainStage);
         }
+
+//      СОздание всего остального
 
         healthBar = createProgressBar(Color.RED, Color.GREEN);
         staminaBar = createProgressBar(Color.GRAY, Color.BLUE);

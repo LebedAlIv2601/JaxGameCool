@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class TilemapActor extends Actor {
+//    Закоменнтированные строки - попытка сделать нормальную отрисовку с масштабом
 //    public static int windowHeight = 100;
 //    public static int windowWidth = Gdx.graphics.getWidth()/(Gdx.graphics.getHeight()/windowHeight);
 
@@ -40,6 +41,7 @@ public class TilemapActor extends Actor {
 //    private float unitScale;
 
     public TilemapActor(String filename, Stage theStage){
+//      Прогрузка непосредственно карты с помощью ассет менеджера
 
         tiledMap = LoadingLevelsScreen.assetManagerLvl.get("Level1Map/" + filename,TiledMap.class);
 
@@ -68,6 +70,7 @@ public class TilemapActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+//      Привязка камеры на карте к камере сцены, которая устанавливается в BaseActor
         Camera mainCamera = getStage().getCamera();
         tiledCamera.position.x = mainCamera.position.x;
         tiledCamera.position.y = mainCamera.position.y;
