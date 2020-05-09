@@ -408,6 +408,9 @@ public class BaseActor extends Group {
     public void addVelocityVec(float det){
         accelerationVec.add(det*walkAcceleration, 0);
     }
+    public void addVelocityVecY(float det){
+        accelerationVec.add(0, det*walkAcceleration);
+    }
     public void decelerateActor(){
         float decelerationAmount = walkDeceleration*deltaTime;
 
@@ -471,5 +474,6 @@ public class BaseActor extends Group {
     public void setVelocityVecY(float v){
         velocityVec.y = v;
     }
+
 
 }

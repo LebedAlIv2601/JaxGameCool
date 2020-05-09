@@ -20,6 +20,8 @@ public class Jax extends BaseActor{
     private Animation<TextureRegion> hit;
     private Animation<TextureRegion> jump;
     private Animation<TextureRegion> stand;
+    private Animation<TextureRegion> climb;
+    private Animation<TextureRegion> climbStart;
     private float jumpSpeed;
     private BaseActor belowSensor;
     private boolean stairsOverlap;
@@ -36,7 +38,8 @@ public class Jax extends BaseActor{
         hit = loadAnimationFromFiles(MainGameValues.texturesForHit, 0.1f,true);
         jump = loadAnimationFromFiles(MainGameValues.texturesForJump, 0.1f,true);
         stand = loadAnimationFromFiles(MainGameValues.staying, 0.1f,true);
-
+        climb = loadAnimationFromFiles(MainGameValues.climbing, 0.1f,true);
+        climbStart = loadTexture("climb1.png");
         at = false;
         flip = false;
         maxHorizontalSpeed = 250;
@@ -74,6 +77,10 @@ public class Jax extends BaseActor{
         belowSensor.setPosition(getX()+5,getY()-8);
         if(isHitting()){
             setAnimation(hit, flip);
+        } else if(getStairsOverlap() && velocityVec.y<=1){
+            setAnimation(climbStart, flip);
+        }else if(getStairsOverlap()){
+            setAnimation(climb, flip);
         } else if(this.isOnSolid()){
             belowSensor.setColor(Color.GREEN);
             if(velocityVec.x == 0){

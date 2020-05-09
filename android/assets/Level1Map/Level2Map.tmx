@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="32" height="12" tilewidth="100" tileheight="100" infinite="0" nextlayerid="3" nextobjectid="79">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="32" height="12" tilewidth="100" tileheight="100" infinite="0" nextlayerid="3" nextobjectid="80">
  <editorsettings>
   <export target="Level2Map..tmx" format="tmx"/>
  </editorsettings>
@@ -64,6 +64,14 @@
   <tile id="0">
    <properties>
     <property name="name" value="Stairs"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="12" name="fly1" tilewidth="100" tileheight="100" tilecount="1" columns="1">
+  <image source="../fly1.png" width="100" height="100"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="FlyEnemy"/>
    </properties>
   </tile>
  </tileset>
@@ -266,5 +274,6 @@
     <property name="name" value="StairsRectangle"/>
    </properties>
   </object>
+  <object id="79" gid="12" x="1500.67" y="382" width="100" height="100"/>
  </objectgroup>
 </map>

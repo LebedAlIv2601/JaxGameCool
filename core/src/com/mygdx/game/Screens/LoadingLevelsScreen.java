@@ -104,6 +104,9 @@ public class LoadingLevelsScreen extends BaseScreen implements Screen {
         assetManagerLvl.load("EnemySt2.png", Texture.class);
         assetManagerLvl.load("flag1.png", Texture.class);
         assetManagerLvl.load("flag2.png", Texture.class);
+        assetManagerLvl.load("climb1.png", Texture.class);
+        assetManagerLvl.load("climb2.png", Texture.class);
+        assetManagerLvl.load("Staying2.png", Texture.class);
         assetManagerLvl.load("jump1.png", Texture.class);
         assetManagerLvl.load("jump2.png", Texture.class);
         assetManagerLvl.load("jump3.png", Texture.class);
@@ -124,6 +127,18 @@ public class LoadingLevelsScreen extends BaseScreen implements Screen {
         assetManagerLvl.load("runEnemy2.png",Texture.class);
         assetManagerLvl.load("runEnemy3.png",Texture.class);
         assetManagerLvl.load("runEnemy4.png",Texture.class);
+
+        assetManagerLvl.load("fly1.png",Texture.class);
+        assetManagerLvl.load("fly2.png",Texture.class);
+        assetManagerLvl.load("fly3.png",Texture.class);
+        assetManagerLvl.load("flyRun1.png",Texture.class);
+        assetManagerLvl.load("flyRun2.png",Texture.class);
+        assetManagerLvl.load("flyRun3.png",Texture.class);
+        assetManagerLvl.load("flyHit1.png",Texture.class);
+        assetManagerLvl.load("flyHit2.png",Texture.class);
+        assetManagerLvl.load("flyHit3.png",Texture.class);
+        assetManagerLvl.load("flyHit4.png",Texture.class);
+
         assetManagerLvl.load("goalGetToTheEnd.png",Texture.class);
         assetManagerLvl.load("dialogBox.png",Texture.class);
         assetManagerLvl.load("Stairs.png",Texture.class);

@@ -24,6 +24,7 @@ import com.mygdx.game.Actors.Crystal;
 import com.mygdx.game.Actors.DialogBox;
 import com.mygdx.game.Actors.Fire;
 import com.mygdx.game.Actors.FirstAidKit;
+import com.mygdx.game.Actors.FlyEnemy;
 import com.mygdx.game.Actors.Grass;
 import com.mygdx.game.Actors.Jax;
 import com.mygdx.game.Actors.Sign;
@@ -133,6 +134,11 @@ public class BaseLevelScreen extends BaseScreen {
         for(MapObject obj : tma.getTileList("StickEnemy")){
             MapProperties props = obj.getProperties();
             new StickEnemy((float)props.get("x"), (float)props.get("y"), mainStage);
+        }
+
+        for(MapObject obj : tma.getTileList("FlyEnemy")){
+            MapProperties props = obj.getProperties();
+            new FlyEnemy((float)props.get("x"), (float)props.get("y"), mainStage);
         }
 
 //      СОздание всего остального
@@ -320,9 +326,14 @@ public class BaseLevelScreen extends BaseScreen {
             StickEnemy st =(StickEnemy) b;
             allLogic(st);
         }
+        for(BaseActor b : BaseActor.getList(mainStage, "FlyEnemy")) {
+            FlyEnemy fl =(FlyEnemy) b;
+            allLogic(fl);
+        }
         allLogic(jax);
         jaxHit();
-        findJax();
+        findJaxByStick();
+        findJaxByFly();
         isOverlapTeleport();
         checkCrystalsCollected();
         crystalCollect();
@@ -369,9 +380,15 @@ public class BaseLevelScreen extends BaseScreen {
                 st.setHealth(-BaseGame.prefs.getFloat("Damage"));
             }
         }
+        for(BaseActor b : BaseActor.getList(mainStage, "FlyEnemy")){
+            if(jax.overlaps(b) && jax.isHitting()){
+                FlyEnemy fl = (FlyEnemy) b;
+                fl.setHealth(-BaseGame.prefs.getFloat("Damage"));
+            }
+        }
     }
 
-    public void findJax(){
+    public void findJaxByStick(){
         for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")){
             if(Math.abs(jax.getY()-b.getY())<50 && Math.abs(jax.getX()-b.getX())<=25){
                 StickEnemy st = (StickEnemy) b;
@@ -386,6 +403,43 @@ public class BaseLevelScreen extends BaseScreen {
                 StickEnemy st = (StickEnemy) b;
                 st.setHitting(false);
                 st.velocityVec.x = 0;
+            }
+        }
+    }
+
+    public void findJaxByFly(){
+        for(BaseActor b : BaseActor.getList(mainStage, "FlyEnemy")){
+            if(Math.abs(jax.getY()-b.getY())<50 && Math.abs(jax.getX()-b.getX())<=25){
+                FlyEnemy fl = (FlyEnemy) b;
+                fl.velocityVec.x = 0;
+                fl.velocityVec.y = 0;
+                fl.setHitting(true);
+                jax.setHealth(fl.getDamage());
+            } else if((Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25 && Math.abs(jax.getY()-b.getY())<=350) || (Math.abs(jax.getY()-b.getY())<=350 && Math.abs(jax.getY()-b.getY())>=50 && Math.abs(jax.getX()-b.getX())<=500)){
+                FlyEnemy fl = (FlyEnemy) b;
+                fl.setHitting(false);
+                if(Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25) {
+                    fl.addVelocityVec((jax.getX() - b.getX()) / (Math.abs(jax.getX() - b.getX())));
+//                    if(fl.getFlyX()!=fl.getX()){
+//                        fl.setFlyX(fl.getX());
+//                    } else {
+//                        if(fl.getX())
+//                        fl.addVelocityVecY((jax.getY() - b.getY()) / (Math.abs(jax.getY() - b.getY())));
+//                    }
+                } else{
+                    fl.velocityVec.x = 0;
+                }
+                if(Math.abs(jax.getY()-b.getY())<=350  &&  Math.abs(jax.getY()-b.getY())>=50) {
+                    fl.addVelocityVecY((jax.getY() - b.getY()) / (Math.abs(jax.getY() - b.getY())));
+                } else {
+                    fl.velocityVec.y = 0;
+                }
+
+            } else{
+                FlyEnemy fl = (FlyEnemy) b;
+                fl.setHitting(false);
+                fl.velocityVec.x = 0;
+                fl.velocityVec.y = 0;
             }
         }
     }
