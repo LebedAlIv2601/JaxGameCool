@@ -384,17 +384,19 @@ public class BaseActor extends Group {
 
 //  реализцаия физики для актеров
     public void physicsApply(float dt){
-        accelerationVec.add(0, -gravity);
-        velocityVec.add(accelerationVec.x * dt, accelerationVec.y * dt);
+        if(BaseLevelScreen.isEndLoad) {
+            accelerationVec.add(0, -gravity);
+            velocityVec.add(accelerationVec.x * dt, accelerationVec.y * dt);
 
-        velocityVec.x = MathUtils.clamp(velocityVec.x, -maxHorizontalSpeed, maxHorizontalSpeed);
-        velocityVec.y = MathUtils.clamp(velocityVec.y, -maxVerticalSpeed, maxVerticalSpeed);
-        moveBy(velocityVec.x*dt, velocityVec.y*dt);
-        accelerationVec.set(0,0);
-        if(velocityVec.x>0){
-            flip = false;
-        } else if (velocityVec.x<0){
-            flip = true;
+            velocityVec.x = MathUtils.clamp(velocityVec.x, -maxHorizontalSpeed, maxHorizontalSpeed);
+            velocityVec.y = MathUtils.clamp(velocityVec.y, -maxVerticalSpeed, maxVerticalSpeed);
+            moveBy(velocityVec.x * dt, velocityVec.y * dt);
+            accelerationVec.set(0, 0);
+            if (velocityVec.x > 0) {
+                flip = false;
+            } else if (velocityVec.x < 0) {
+                flip = true;
+            }
         }
     }
 

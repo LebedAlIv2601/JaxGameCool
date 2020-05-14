@@ -19,7 +19,7 @@ public class FlyEnemy extends BaseActor {
         walkDeceleration = 2000;
         gravity = 0;
         maxVerticalSpeed = 400;
-        setHealth(90);
+        setHealth(75);
         setDamage(0.8f);
         stand = loadAnimationFromFiles(MainGameValues.flyStand, 0.1f, true);
         hit = loadAnimationFromFiles(MainGameValues.flyHit, 0.1f, true);

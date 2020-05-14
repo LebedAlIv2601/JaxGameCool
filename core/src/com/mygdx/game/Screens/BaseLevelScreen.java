@@ -38,6 +38,7 @@ import com.mygdx.game.JaxGame;
 import com.mygdx.game.MainGameValues;
 import com.mygdx.game.Actors.StickEnemy;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -72,6 +73,8 @@ public class BaseLevelScreen extends BaseScreen {
     private boolean sayWhat;
     public boolean zeroStamina;
     private Label healthLabel;
+    private boolean[] loadList;
+    public static boolean isEndLoad;
 
     public BaseLevelScreen(int n, int g, JaxGame jg) {
         super(n,g,jg);
@@ -80,12 +83,17 @@ public class BaseLevelScreen extends BaseScreen {
     @Override
     public void initialize() {
 //      Прогрузка и размещение ОБЪЕКТОВ на карте
+        isEndLoad = false;
 
         tma = new TilemapActor(MainGameValues.maps[levelNumber], mainStage);
 
+        loadList = new boolean[tma.getRectangleList("Solid").size()];
+        int i = 0;
         for(MapObject obj : tma.getRectangleList("Solid")){
-            MapProperties props = obj.getProperties();
-            new Solid((float)props.get("x"), (float)props.get("y"), (float)props.get("width"), (float)props.get("height"), mainStage);
+                MapProperties props = obj.getProperties();
+                new Solid((float)props.get("x"), (float)props.get("y"), (float)props.get("width"), (float)props.get("height"), mainStage);
+                loadList[i] = true;
+                i++;
         }
 
         for(MapObject obj : tma.getRectangleList("StairsRectangle")){
@@ -284,67 +292,84 @@ public class BaseLevelScreen extends BaseScreen {
 
     @Override
     public void update(float dt){
+        if(checkLoad()) {
 
-        ost.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
+            isEndLoad = true;
 
-        if(leftButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.A)){
-            jax.addVelocityVec(-1);
-        } else if(rightButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.D)){
-            jax.addVelocityVec(1);
-        }else {
-            jax.decelerateActor();
+            ost.setVolume(BaseGame.prefs.getFloat("MusicVolume") / 3);
+
+            if (leftButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.A)) {
+                jax.addVelocityVec(-1);
+            } else if (rightButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.D)) {
+                jax.addVelocityVec(1);
+            } else {
+                jax.decelerateActor();
+            }
+
+            if (!zeroStamina && (attackButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.SPACE))) {
+                jax.setHitting(true);
+                jax.setStamina(-1.2f);
+            } else {
+                jax.setHitting(false);
+                if (!attackButton.isPressed()) {
+                    jax.setStamina(0.2f);
+                }
+            }
+
+            if (climbButton.isPressed() && jax.getStairsOverlap()) {
+                jax.setGravity(0);
+                jax.climb();
+            } else if (jax.getStairsOverlap()) {
+                if (!zeroClimbFlag) {
+                    jax.velocityVec.y = 0;
+                    zeroClimbFlag = true;
+                }
+                jax.climbDown();
+                jax.setGravity(0);
+            } else {
+                jax.setGravity(700);
+                zeroClimbFlag = false;
+            }
+
+
+            for (BaseActor b : BaseActor.getList(mainStage, "StickEnemy")) {
+                StickEnemy st = (StickEnemy) b;
+                allLogic(st);
+            }
+            for (BaseActor b : BaseActor.getList(mainStage, "FlyEnemy")) {
+                FlyEnemy fl = (FlyEnemy) b;
+                allLogic(fl);
+            }
+            allLogic(jax);
+            jaxHit();
+            findJaxByStick();
+            findJaxByFly();
+            isOverlapTeleport();
+            checkCrystalsCollected();
+            crystalCollect();
+            collectFirstAidKit();
+            overlapSign();
+            overlapStairs();
+            controlZeroStamina();
+            healthBar.setValue(jax.getHealth() / BaseGame.prefs.getFloat("Health"));
+            staminaBar.setValue(jax.getStamina() / BaseGame.prefs.getFloat("Stamina"));
+            healthLabel.setText("Health: " + BaseGame.prefs.getFloat("Health"));
         }
 
-        if (!zeroStamina&&(attackButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.SPACE)) ) {
-            jax.setHitting(true);
-            jax.setStamina(-1.2f);
-        } else {
-            jax.setHitting(false);
-            if(!attackButton.isPressed()) {
-                jax.setStamina(0.2f);
+    }
+
+    public boolean checkLoad(){
+        int n = 0;
+        for(int i = 0; i<tma.getRectangleList("Solid").size(); i++){
+            if(loadList[i] == true){
+                n+=1;
             }
         }
-
-        if(climbButton.isPressed() && jax.getStairsOverlap()) {
-            jax.setGravity(0);
-            jax.climb();
-        } else if(jax.getStairsOverlap()){
-            if(!zeroClimbFlag){
-                jax.velocityVec.y = 0;
-                zeroClimbFlag = true;
-            }
-            jax.climbDown();
-            jax.setGravity(0);
-        } else {
-            jax.setGravity(700);
-            zeroClimbFlag = false;
+        if(n == tma.getRectangleList("Solid").size()){
+            return true;
+        } else{
+            return false;
         }
-
-
-
-        for(BaseActor b : BaseActor.getList(mainStage, "StickEnemy")) {
-            StickEnemy st =(StickEnemy) b;
-            allLogic(st);
-        }
-        for(BaseActor b : BaseActor.getList(mainStage, "FlyEnemy")) {
-            FlyEnemy fl =(FlyEnemy) b;
-            allLogic(fl);
-        }
-        allLogic(jax);
-        jaxHit();
-        findJaxByStick();
-        findJaxByFly();
-        isOverlapTeleport();
-        checkCrystalsCollected();
-        crystalCollect();
-        collectFirstAidKit();
-        overlapSign();
-        overlapStairs();
-        controlZeroStamina();
-        healthBar.setValue(jax.getHealth()/ BaseGame.prefs.getFloat("Health"));
-        staminaBar.setValue(jax.getStamina()/BaseGame.prefs.getFloat("Stamina"));
-        healthLabel.setText("Health: "+ BaseGame.prefs.getFloat("Health"));
-
     }
 
     public void onGround(BaseActor a){

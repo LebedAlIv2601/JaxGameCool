@@ -85,6 +85,7 @@ public class LoadingLevelsScreen extends BaseScreen implements Screen {
         assetManagerLvl.load("Level1Map/fire1.png", Texture.class);
         assetManagerLvl.load("Level1Map/fire2.png", Texture.class);
         assetManagerLvl.load("Level1Map/Level1TileSet.png", Texture.class);
+        assetManagerLvl.load("Level1Map/TileSetHell.png", Texture.class);
         assetManagerLvl.load("1.png", Texture.class);
         assetManagerLvl.load("2.png", Texture.class);
         assetManagerLvl.load("3.png", Texture.class);

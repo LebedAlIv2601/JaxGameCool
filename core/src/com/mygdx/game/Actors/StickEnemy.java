@@ -18,7 +18,7 @@ public class StickEnemy extends BaseActor {
         gravity = 700;
         maxVerticalSpeed = 1000;
         setHealth(100);
-        setDamage(0.6f);
+        setDamage(0.3f);
         stand = loadAnimationFromFiles(MainGameValues.enemyStand, 0.1f, true);
         hit = loadAnimationFromFiles(MainGameValues.enemyHit, 0.1f, true);
         walk = loadAnimationFromFiles(MainGameValues.enemyWalk, 0.1f, true);

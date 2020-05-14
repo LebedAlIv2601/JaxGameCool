@@ -32,7 +32,7 @@ public class MainGameValues {
 
     public static String[] signAnimation = {"flag1.png", "flag2.png"};
 
-    public static String[] maps = {"Level1Map1.tmx", "Level1Map.tmx", "Level2Map.tmx", "Level2Map2.tmx"};
+    public static String[] maps = {"Level1Map1.tmx", "Level1Map.tmx", "Level2Map.tmx", "Level3Map.tmx", "Level2Map2.tmx"};
 
     public static String[] fire = {"Level1Map/fire1.png","Level1Map/fire2.png"};
 
@@ -50,6 +50,9 @@ public class MainGameValues {
                 g = 1;
                 break;
             case 3:
+                g = 0;
+                break;
+            case 4:
                 g = 1;
                 break;
             default:
