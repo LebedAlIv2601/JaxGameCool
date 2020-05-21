@@ -101,6 +101,7 @@ public class SettingsScreen extends BaseScreen{
         sliderStyle.knobBefore = drawable;
 
         drawable = new TextureRegionDrawable(new TextureRegion(new Texture("knob.png")));
+        drawable.setMinSize(50,50);
         sliderStyle.knob = drawable;
 
         musicSlider = new Slider(0, 1, 0.1f, false, sliderStyle);
@@ -110,26 +111,26 @@ public class SettingsScreen extends BaseScreen{
         soundSlider.setValue(BaseGame.prefs.getFloat("SoundVolume"));
 
         uiTable.pad(20);
-        uiTable.add(menuButton).top().left().colspan(2).padBottom(30);
-        uiTable.add(settingsLabel).top().center().colspan(5).padBottom(30);
-        uiTable.add().colspan(2);
+        uiTable.add(menuButton).minWidth(200).minHeight(200).top().left().colspan(1).padBottom(30);
+        uiTable.add(settingsLabel).top().center().colspan(4).padBottom(30);
+//        uiTable.add().colspan(2);
 
 //        uiTable.add().expandX();
         uiTable.row();
-        uiTable.add().colspan(2);
-        uiTable.add(musicLabel).top().center().colspan(5).padTop(50).padBottom(30);
-        uiTable.add().colspan(2);
-        uiTable.row();
-        uiTable.add().colspan(2);
-        uiTable.add(musicSlider).top().center().colspan(5).padBottom(30);
+//        uiTable.add().colspan(1);
+        uiTable.add(musicLabel).minWidth(400).top().center().colspan(5).padTop(50).padBottom(30);
         uiTable.add().colspan(2);
         uiTable.row();
-        uiTable.add().colspan(2);
-        uiTable.add(soundLabel).top().center().colspan(5).padBottom(30);
+//        uiTable.add().colspan(1);
+        uiTable.add(musicSlider).minWidth(400).top().center().colspan(5).padBottom(30);
         uiTable.add().colspan(2);
         uiTable.row();
+//        uiTable.add().colspan(1);
+        uiTable.add(soundLabel).minWidth(400).top().center().colspan(5).padBottom(30);
         uiTable.add().colspan(2);
-        uiTable.add(soundSlider).top().center().colspan(5).padBottom(30);
+        uiTable.row();
+//        uiTable.add().colspan(1);
+        uiTable.add(soundSlider).minWidth(400).top().center().colspan(5).padBottom(30);
         uiTable.add().colspan(2);
         uiTable.row();
         uiTable.add().expandY();
@@ -140,6 +141,7 @@ public class SettingsScreen extends BaseScreen{
 //      Изменение уровня громкости
         BaseGame.prefs.putFloat("MusicVolume", musicSlider.getValue());
         BaseGame.prefs.putFloat("SoundVolume", soundSlider.getValue());
+        BaseGame.prefs.flush();
         MenuScreen.changeSoundOst();
     }
 }

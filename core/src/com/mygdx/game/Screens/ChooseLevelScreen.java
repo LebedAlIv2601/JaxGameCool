@@ -71,7 +71,7 @@ public class ChooseLevelScreen extends BaseScreen {
 
         lvlButtons = new ArrayList<TextButton>();
         uiTable.pad(20);
-        uiTable.add(menuButton).top().left().colspan(2).padBottom(30);
+        uiTable.add(menuButton).minWidth(200).top().left().colspan(2).padBottom(30);
         uiTable.add(chooseLabel).top().center().colspan(5).padBottom(30);
         uiTable.add().expandX();
         uiTable.row();
@@ -90,6 +90,7 @@ public class ChooseLevelScreen extends BaseScreen {
     public void createNextButton(int i){
         final int num = i;
         lvlButtons.add(new TextButton(Integer.toString(i+1), BaseGame.textButtonStyle));
+//        lvlButtons.getLabel().setFontScale(4);
         lvlButtons.get(i).addListener(new EventListener() {
             @Override
 
@@ -104,7 +105,7 @@ public class ChooseLevelScreen extends BaseScreen {
             }
         });
 
-        uiTable.add(lvlButtons.get(i)).top().padLeft(30);
+        uiTable.add(lvlButtons.get(i)).minWidth(150).minHeight(150).top().padLeft(30);
         if(i%8==0 && i!=0){
             uiTable.row();
         }

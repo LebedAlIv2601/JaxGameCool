@@ -343,12 +343,14 @@ public class BaseActor extends Group {
 
     public void alignCamera(){
         Camera cam =  this.getStage().getCamera();
+
         Viewport v = this.getStage().getViewport();
 
         cam.position.set(this.getX() + this.getOriginX(), this.getY()+this.getOriginY(), 0);
 
         cam.position.x = MathUtils.clamp(cam.position.x, cam.viewportWidth/2, worldBounds.width-cam.viewportWidth/2);
         cam.position.y = MathUtils.clamp(cam.position.y, cam.viewportHeight/2, worldBounds.height-cam.viewportHeight/2);
+
         cam.update();
     }
 

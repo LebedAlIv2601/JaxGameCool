@@ -158,6 +158,7 @@ public class SplashScreen extends BaseScreen implements Screen {
     public void intro(){
         intro = jg.assetManager.get("Splash/splashINTRO.mp3",Music.class);
         intro.setLooping(false);
+        intro.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
         intro.play();
     }
 

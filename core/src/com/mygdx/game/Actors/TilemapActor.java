@@ -78,6 +78,7 @@ public class TilemapActor extends Actor {
 //        tiledCamera.zoom = 2;
         tiledCamera.update();
         tiledMapRenderer.setView(tiledCamera);
+//        batch.setProjectionMatrix(tiledCamera.combined);
         batch.end();
         tiledMapRenderer.render();
         batch.begin();

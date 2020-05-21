@@ -20,7 +20,7 @@ public class MainGameValues {
 
 
 
-    public static String[] enemyStand = {"EnemySt1.png", "EnemySt2.png"};
+    public static String[] enemyStand = {"EnemySt1.png"};
     public static String[] enemyWalk = {"runEnemy1.png", "runEnemy2.png", "runEnemy3.png", "runEnemy4.png"};
     public static String[] enemyHit = {"enemyHit.png", "EnemySt1.png"};
 

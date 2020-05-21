@@ -38,10 +38,6 @@ import com.mygdx.game.JaxGame;
 import com.mygdx.game.MainGameValues;
 import com.mygdx.game.Actors.StickEnemy;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-
 public class BaseLevelScreen extends BaseScreen {
     private Jax jax;
     private TextButton leftButton;
@@ -166,8 +162,6 @@ public class BaseLevelScreen extends BaseScreen {
         jumpSound = LoadingLevelsScreen.assetManagerLvl.get("jumpSound.mp3",Sound.class);
         whatSound = LoadingLevelsScreen.assetManagerLvl.get("whatSound.mp3",Sound.class);
 
-        healthLabel= new Label("Health: ", BaseGame.labelStyle);
-
         Button restartButton = new Button(buttonStyleRestart);
 
         restartButton.addListener(new EventListener() {
@@ -183,6 +177,7 @@ public class BaseLevelScreen extends BaseScreen {
         });
 
         jumpButton = new TextButton("jump", BaseGame.textButtonStyle);
+        jumpButton.addAction(Actions.alpha(0.4f));
 
         jumpButton.addListener(new EventListener() {
             @Override
@@ -200,6 +195,7 @@ public class BaseLevelScreen extends BaseScreen {
         });
 
         climbButton = new TextButton("climb", BaseGame.textButtonStyle);
+        climbButton.addAction(Actions.alpha(0.4f));
 
 
 
@@ -219,8 +215,12 @@ public class BaseLevelScreen extends BaseScreen {
         });
 
         leftButton = new TextButton("<=", BaseGame.textButtonStyle);
+        leftButton.addAction(Actions.alpha(0.4f));
+        leftButton.getLabel().setFontScale(6);
         rightButton = new TextButton("=>", BaseGame.textButtonStyle);
+        rightButton.addAction(Actions.alpha(0.4f));
         attackButton = new TextButton("=[==>", BaseGame.textButtonStyle);
+        attackButton.addAction(Actions.alpha(0.4f));
 
         BaseActor goalMessage = new BaseActor(0, 0, uiStage);
         switch (goalNumber){
@@ -236,8 +236,8 @@ public class BaseLevelScreen extends BaseScreen {
         goalMessage.addAction(Actions.sequence(Actions.fadeIn(2), Actions.fadeOut(1)));
 
 
-        dialogBox = new DialogBox(Gdx.graphics.getWidth()/2 - 225, Gdx.graphics.getHeight() - 250,uiStage);
-        dialogBox.setDialogSize(450, 150);
+        dialogBox = new DialogBox(Gdx.graphics.getWidth()/2 - 225, Gdx.graphics.getHeight() - 210,uiStage);
+        dialogBox.setDialogSize(450, 200);
         dialogBox.setFontScale(0.8f);
         dialogBox.setFontColor(Color.GOLD);
         dialogBox.alignCenter();
@@ -245,25 +245,25 @@ public class BaseLevelScreen extends BaseScreen {
 
 
         uiTable.pad(10);
-        uiTable.add(healthBar).top().colspan(1);
-        uiTable.add(staminaBar).padLeft(10).top().colspan(1);
-        uiTable.add(healthLabel).padLeft(10).top().colspan(1);
+        uiTable.add(healthBar).minWidth(200).top().colspan(1);
+        uiTable.add(staminaBar).minWidth(200).padLeft(10).top().colspan(1);
+        uiTable.add().minWidth(200).padLeft(10).top().colspan(1);
         uiTable.add().expandX().expandY();
-        uiTable.add(menuButton).top().right();
-        uiTable.add(restartButton).top().padLeft(20).right();
+        uiTable.add(menuButton).minWidth(200).minHeight(200).top().right();
+        uiTable.add(restartButton).minWidth(200).minHeight(200).top().padLeft(20).right();
         uiTable.row();
         uiTable.add().expandY();
         uiTable.row();
         uiTable.add().colspan(4);
         uiTable.add().expandX().expandY();
-        uiTable.add(climbButton).bottom().right().colspan(1);
+        uiTable.add(climbButton).minWidth(200).minHeight(200).bottom().right().colspan(1);
         uiTable.row();
-        uiTable.add(leftButton).bottom().colspan(1);
-        uiTable.add(rightButton).bottom().colspan(1);
+        uiTable.add(leftButton).minWidth(200).minHeight(200).maxWidth(200).maxHeight(200).bottom().colspan(1);
+        uiTable.add(rightButton).minWidth(200).minHeight(200).bottom().colspan(1);
         uiTable.add().colspan(1);
         uiTable.add().expandX().expandY();
-        uiTable.add(attackButton).bottom().right();
-        uiTable.add(jumpButton).bottom().right();
+        uiTable.add(attackButton).minWidth(200).minHeight(200).bottom().right();
+        uiTable.add(jumpButton).minWidth(200).minHeight(200).bottom().right();
 
         switch(goalNumber){
             case 0:
@@ -353,7 +353,7 @@ public class BaseLevelScreen extends BaseScreen {
             controlZeroStamina();
             healthBar.setValue(jax.getHealth() / BaseGame.prefs.getFloat("Health"));
             staminaBar.setValue(jax.getStamina() / BaseGame.prefs.getFloat("Stamina"));
-            healthLabel.setText("Health: " + BaseGame.prefs.getFloat("Health"));
+
         }
 
     }
