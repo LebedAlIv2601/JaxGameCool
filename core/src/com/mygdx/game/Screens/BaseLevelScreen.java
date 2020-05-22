@@ -320,7 +320,7 @@ public class BaseLevelScreen extends BaseScreen {
 
 
         uiTable.pad(10);
-        uiTable.add(healthBar).minWidth(200).top().colspan(1);
+        uiTable.add(healthBar).minWidth(200).minWidth(40).maxWidth(200).maxHeight(40).top().colspan(1);
         uiTable.add(staminaBar).minWidth(200).padLeft(10).top().colspan(1);
         uiTable.add().minWidth(200).padLeft(10).top().colspan(1);
         uiTable.add().expandX().expandY();
@@ -377,7 +377,7 @@ public class BaseLevelScreen extends BaseScreen {
             if(jumpButton.isPressed()){
                 if(!pressed4){
                     jumpButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
-                    jumpButton.setPosition(winWidth-20-276+18,20+18);
+                    jumpButton.setPosition(winWidth-20-winWidth*0.15f+18,20+18);
                     pressed4 = true;
                     }
                 }
