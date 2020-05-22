@@ -148,6 +148,15 @@ public class LoadingLevelsScreen extends BaseScreen implements Screen {
         assetManagerLvl.load("goalCrystals.png",Texture.class);
         assetManagerLvl.load("collectCrystals.png",Texture.class);
 
+        assetManagerLvl.load("Buttons/buttonRunLeft.png",Texture.class);
+        assetManagerLvl.load("Buttons/buttonRunRight.png",Texture.class);
+        assetManagerLvl.load("Buttons/buttonHit.png",Texture.class);
+        assetManagerLvl.load("Buttons/buttonJump.png",Texture.class);
+        assetManagerLvl.load("Buttons/buttonClimb.png",Texture.class);
+        assetManagerLvl.load("Buttons/buttonRestart.png",Texture.class);
+        assetManagerLvl.load("Buttons/buttonMenu.png",Texture.class);
+
+
         assetManagerLvl.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 
         assetManagerLvl.load( "Level1Map/" + MainGameValues.maps[num], TiledMap.class);

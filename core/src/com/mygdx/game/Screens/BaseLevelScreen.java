@@ -11,10 +11,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.*;
+import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -43,8 +46,6 @@ public class BaseLevelScreen extends BaseScreen {
     private TextButton leftButton;
     private TextButton rightButton;
     private TextButton attackButton;
-    private TextButton climbButton;
-    private TextButton menuButton;
     private ProgressBar healthBar;
     private ProgressBar staminaBar;
     private Label loseLabel;
@@ -65,12 +66,28 @@ public class BaseLevelScreen extends BaseScreen {
     private boolean checkCrystalsFlag;
     private boolean zeroClimbFlag;
     private DialogBox dialogBox;
-    private TextButton jumpButton;
+    private Button jumpButton;
     private boolean sayWhat;
     public boolean zeroStamina;
     private Label healthLabel;
     private boolean[] loadList;
     public static boolean isEndLoad;
+
+    public static int winWidth = Gdx.graphics.getWidth();
+    public static int winHeight = Gdx.graphics.getHeight();
+
+    private Button runLeftButton;
+    private Button runRightButton;
+    private Button hitButton;
+    private Button climbButton;
+    private Button restartButton;
+    private Button menuButton;
+
+    private boolean pressed1;
+    private boolean pressed2;
+    private boolean pressed3;
+    private boolean pressed4;
+    private boolean pressed5;
 
     public BaseLevelScreen(int n, int g, JaxGame jg) {
         super(n,g,jg);
@@ -80,6 +97,11 @@ public class BaseLevelScreen extends BaseScreen {
     public void initialize() {
 //      Прогрузка и размещение ОБЪЕКТОВ на карте
         isEndLoad = false;
+        pressed1 = false;
+        pressed2 = false;
+        pressed3 = false;
+        pressed4 = false;
+        pressed5 = false;
 
         tma = new TilemapActor(MainGameValues.maps[levelNumber], mainStage);
 
@@ -150,19 +172,31 @@ public class BaseLevelScreen extends BaseScreen {
         healthBar = createProgressBar(Color.RED, Color.GREEN);
         staminaBar = createProgressBar(Color.GRAY, Color.BLUE);
 
+        Button.ButtonStyle buttonStyleMenu = new Button.ButtonStyle();
+        Texture buttonMenu = LoadingLevelsScreen.assetManagerLvl.get("Buttons/buttonMenu.png",Texture.class);
+        TextureRegion buttonRegionMenu = new TextureRegion(buttonMenu);
+        buttonStyleMenu.up = new TextureRegionDrawable(buttonRegionMenu);
+        menuButton = new Button(buttonStyleMenu);
+        menuButton.setPosition(winWidth - 350 - winWidth*0.15f,winHeight - 20 - winHeight*0.26f );
+        menuButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        uiStage.addActor(menuButton);
+
 
 // healthBar.setBounds(10,10,500,20); slap
         Button.ButtonStyle buttonStyleRestart = new Button.ButtonStyle();
-        Texture buttonRestart = LoadingLevelsScreen.assetManagerLvl.get("restart.png",Texture.class);
+        Texture buttonRestart = LoadingLevelsScreen.assetManagerLvl.get("Buttons/buttonRestart.png",Texture.class);
         TextureRegion buttonRegionRestart = new TextureRegion(buttonRestart);
         buttonStyleRestart.up = new TextureRegionDrawable(buttonRegionRestart);
+
+        restartButton = new Button(buttonStyleRestart);
+        restartButton.setPosition(winWidth - 20 - winWidth*0.15f,winHeight - 20 - winHeight*0.26f );
+        restartButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        uiStage.addActor(restartButton);
 
         crystalCollectSound = LoadingLevelsScreen.assetManagerLvl.get("crystalCollectSound.mp3",Sound.class);
         firstAidKitSound = LoadingLevelsScreen.assetManagerLvl.get("firstAidKitSound.mp3",Sound.class);
         jumpSound = LoadingLevelsScreen.assetManagerLvl.get("jumpSound.mp3",Sound.class);
         whatSound = LoadingLevelsScreen.assetManagerLvl.get("whatSound.mp3",Sound.class);
-
-        Button restartButton = new Button(buttonStyleRestart);
 
         restartButton.addListener(new EventListener() {
             @Override
@@ -176,8 +210,62 @@ public class BaseLevelScreen extends BaseScreen {
             }
         });
 
-        jumpButton = new TextButton("jump", BaseGame.textButtonStyle);
-        jumpButton.addAction(Actions.alpha(0.4f));
+        menuButton.addListener(new EventListener() {
+            @Override
+
+            public boolean handle(Event e) {
+                if (!isTouchDownEvent(e)){
+                    return false;
+                }
+                BaseGame.setActiveScreen(new MenuScreen(jg));
+                ost.dispose();
+                return false;
+            }
+        });
+
+
+
+        Button.ButtonStyle buttonStyleRunLeft = new Button.ButtonStyle();
+        Texture buttonRunLeft = LoadingLevelsScreen.assetManagerLvl.get("Buttons/buttonRunLeft.png",Texture.class);
+        TextureRegion buttonRegionRunLeft = new TextureRegion(buttonRunLeft);
+        buttonStyleRunLeft.up = new TextureRegionDrawable(buttonRegionRunLeft);
+
+        runLeftButton = new Button(buttonStyleRunLeft);
+        runLeftButton.setPosition(20,20);
+        runLeftButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        uiStage.addActor(runLeftButton);
+
+        Button.ButtonStyle buttonStyleRunRight = new Button.ButtonStyle();
+        Texture buttonRunRight = LoadingLevelsScreen.assetManagerLvl.get("Buttons/buttonRunRight.png",Texture.class);
+        TextureRegion buttonRegionRunRight = new TextureRegion(buttonRunRight);
+        buttonStyleRunRight.up = new TextureRegionDrawable(buttonRegionRunRight);
+
+        runRightButton = new Button(buttonStyleRunRight);
+        runRightButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        runRightButton.setPosition(350,20);
+        uiStage.addActor(runRightButton);
+
+
+        Button.ButtonStyle buttonStyleHit = new Button.ButtonStyle();
+        Texture buttonHit = LoadingLevelsScreen.assetManagerLvl.get("Buttons/buttonHit.png",Texture.class);
+        TextureRegion buttonRegionHit = new TextureRegion(buttonHit);
+        buttonStyleHit.up = new TextureRegionDrawable(buttonRegionHit);
+
+        hitButton = new Button(buttonStyleHit);
+        hitButton.setPosition(winWidth - 350 - winWidth*0.15f,20);
+        hitButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        uiStage.addActor(hitButton);
+
+
+        Button.ButtonStyle buttonStyleJump = new Button.ButtonStyle();
+        Texture buttonJump = LoadingLevelsScreen.assetManagerLvl.get("Buttons/buttonJump.png",Texture.class);
+        TextureRegion buttonRegionJump = new TextureRegion(buttonJump);
+        buttonStyleJump.up = new TextureRegionDrawable(buttonRegionJump);
+
+        jumpButton = new Button(buttonStyleJump);
+        jumpButton.setPosition(winWidth - 20 - winWidth*0.15f,20);
+        jumpButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        uiStage.addActor(jumpButton);
 
         jumpButton.addListener(new EventListener() {
             @Override
@@ -194,33 +282,20 @@ public class BaseLevelScreen extends BaseScreen {
             }
         });
 
-        climbButton = new TextButton("climb", BaseGame.textButtonStyle);
-        climbButton.addAction(Actions.alpha(0.4f));
+        Button.ButtonStyle buttonStyleClimb = new Button.ButtonStyle();
+        Texture buttonClimb = LoadingLevelsScreen.assetManagerLvl.get("Buttons/buttonClimb.png",Texture.class);
+        TextureRegion buttonRegionClimb = new TextureRegion(buttonClimb);
+        buttonStyleClimb.up = new TextureRegionDrawable(buttonRegionClimb);
+
+        climbButton = new Button(buttonStyleClimb);
+        climbButton.setPosition(winWidth - 20 - winWidth*0.15f,20+150);
+        climbButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        uiStage.addActor(climbButton);
 
 
 
-        menuButton = new TextButton("Menu", BaseGame.textButtonStyle);
-
-        menuButton.addListener(new EventListener() {
-            @Override
-
-            public boolean handle(Event e) {
-                if (!isTouchDownEvent(e)){
-                    return false;
-                }
-                BaseGame.setActiveScreen(new MenuScreen(jg));
-                ost.dispose();
-                return false;
-            }
-        });
-
-        leftButton = new TextButton("<=", BaseGame.textButtonStyle);
-        leftButton.addAction(Actions.alpha(0.4f));
-        leftButton.getLabel().setFontScale(6);
-        rightButton = new TextButton("=>", BaseGame.textButtonStyle);
-        rightButton.addAction(Actions.alpha(0.4f));
-        attackButton = new TextButton("=[==>", BaseGame.textButtonStyle);
-        attackButton.addAction(Actions.alpha(0.4f));
+//        attackButton = new TextButton("=[==>", BaseGame.textButtonStyle);
+//        attackButton.addAction(Actions.alpha(0.4f));
 
         BaseActor goalMessage = new BaseActor(0, 0, uiStage);
         switch (goalNumber){
@@ -249,21 +324,22 @@ public class BaseLevelScreen extends BaseScreen {
         uiTable.add(staminaBar).minWidth(200).padLeft(10).top().colspan(1);
         uiTable.add().minWidth(200).padLeft(10).top().colspan(1);
         uiTable.add().expandX().expandY();
-        uiTable.add(menuButton).minWidth(200).minHeight(200).top().right();
-        uiTable.add(restartButton).minWidth(200).minHeight(200).top().padLeft(20).right();
-        uiTable.row();
-        uiTable.add().expandY();
-        uiTable.row();
-        uiTable.add().colspan(4);
-        uiTable.add().expandX().expandY();
-        uiTable.add(climbButton).minWidth(200).minHeight(200).bottom().right().colspan(1);
-        uiTable.row();
-        uiTable.add(leftButton).minWidth(200).minHeight(200).maxWidth(200).maxHeight(200).bottom().colspan(1);
-        uiTable.add(rightButton).minWidth(200).minHeight(200).bottom().colspan(1);
-        uiTable.add().colspan(1);
-        uiTable.add().expandX().expandY();
-        uiTable.add(attackButton).minWidth(200).minHeight(200).bottom().right();
-        uiTable.add(jumpButton).minWidth(200).minHeight(200).bottom().right();
+//        uiTable.add(menuButton).minWidth(200).minHeight(200).top().right();
+//        uiTable.add().minWidth(20+winWidth*0.15f);
+//        uiTable.add(restartButton).minWidth(200).minHeight(200).top().padLeft(20).right();
+//        uiTable.row();
+//        uiTable.add().expandY();
+//        uiTable.row();
+//        uiTable.add().colspan(4);
+//        uiTable.add().expandX().expandY();
+//        uiTable.add(climbButton).minWidth(200).minHeight(200).bottom().right().colspan(1);
+//        uiTable.row();
+//        uiTable.add(leftButton).minWidth(200).minHeight(200).maxWidth(200).maxHeight(200).bottom().colspan(1);
+//        uiTable.add(rightButton).minWidth(200).minHeight(200).bottom().colspan(1);
+//        uiTable.add().colspan(1);
+//        uiTable.add().expandX().expandY();
+//        uiTable.add(attackButton).minWidth(200).minHeight(200).bottom().right();
+//        uiTable.add(jumpButton).minWidth(200).minHeight(200).bottom().right();
 
         switch(goalNumber){
             case 0:
@@ -291,44 +367,114 @@ public class BaseLevelScreen extends BaseScreen {
     }
 
     @Override
-    public void update(float dt){
-        if(checkLoad()) {
+    public void update(float dt) {
+        if (checkLoad()) {
 
             isEndLoad = true;
 
             ost.setVolume(BaseGame.prefs.getFloat("MusicVolume") / 3);
 
-            if (leftButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.A)) {
-                jax.addVelocityVec(-1);
-            } else if (rightButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.D)) {
-                jax.addVelocityVec(1);
-            } else {
-                jax.decelerateActor();
+            if(jumpButton.isPressed()){
+                if(!pressed4){
+                    jumpButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    jumpButton.setPosition(winWidth-20-276+18,20+18);
+                    pressed4 = true;
+                    }
+                }
+            else {
+                pressed4 = false;
+                jumpButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                jumpButton.setPosition(winWidth - 20 - winWidth*0.15f,20);
             }
 
-            if (!zeroStamina && (attackButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.SPACE))) {
+            if (runLeftButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.A)) {
+                jax.addVelocityVec(-1);
+
+                if(!pressed1){
+                    runLeftButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    runLeftButton.setPosition(20+18,20+18);
+                    pressed1 = true;
+                }
+
+                pressed2 = false;
+                runRightButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runRightButton.setPosition(350,20);
+
+            } else if (runRightButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.D)) {
+                jax.addVelocityVec(1);
+
+                if(!pressed2){
+                    runRightButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    runRightButton.setPosition(350+18,20+18);
+                    pressed2 = true;
+                }
+
+                pressed1 = false;
+                runLeftButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runLeftButton.setPosition(20,20);
+            } else {
+                jax.decelerateActor();
+
+                pressed2 = false;
+                runRightButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runRightButton.setPosition(350,20);
+
+                pressed1 = false;
+                runLeftButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runLeftButton.setPosition(20,20);
+            }
+
+            if (!zeroStamina && (hitButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.SPACE))) {
                 jax.setHitting(true);
                 jax.setStamina(-1.2f);
+
+                if(!pressed3){
+                    hitButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    hitButton.setPosition(winWidth-350-winWidth*0.15f+18,20+18);
+                    pressed3 = true;
+                }
+
             } else {
                 jax.setHitting(false);
-                if (!attackButton.isPressed()) {
+                if (!hitButton.isPressed()) {
                     jax.setStamina(0.2f);
+
+                    pressed3 = false;
+                    hitButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                    hitButton.setPosition(winWidth-350-winWidth*0.15f,20);
                 }
             }
 
             if (climbButton.isPressed() && jax.getStairsOverlap()) {
                 jax.setGravity(0);
                 jax.climb();
+
+                if(!pressed5){
+                    climbButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    climbButton.setPosition(winWidth-20-winWidth*0.15f+18,300+20+18);
+                    pressed5 = true;
+                }
+
             } else if (jax.getStairsOverlap()) {
                 if (!zeroClimbFlag) {
                     jax.velocityVec.y = 0;
                     zeroClimbFlag = true;
+
                 }
                 jax.climbDown();
                 jax.setGravity(0);
+
+
+                pressed5 = false;
+                climbButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                climbButton.setPosition(winWidth-20-winWidth*0.15f,300+20);
             } else {
                 jax.setGravity(700);
                 zeroClimbFlag = false;
+
+                pressed5 = false;
+                climbButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                climbButton.setPosition(winWidth-20-winWidth*0.15f,300+20);
             }
 
 
@@ -355,8 +501,8 @@ public class BaseLevelScreen extends BaseScreen {
             staminaBar.setValue(jax.getStamina() / BaseGame.prefs.getFloat("Stamina"));
 
         }
-
     }
+
 
     public boolean checkLoad(){
         int n = 0;
