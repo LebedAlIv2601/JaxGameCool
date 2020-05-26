@@ -11,16 +11,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.actions.*;
-import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.Actors.BaseActor;
 import com.mygdx.game.Actors.Crystal;
@@ -43,39 +39,26 @@ import com.mygdx.game.Actors.StickEnemy;
 
 public class BaseLevelScreen extends BaseScreen {
     private Jax jax;
-    private TextButton leftButton;
-    private TextButton rightButton;
-    private TextButton attackButton;
+
     private ProgressBar healthBar;
     private ProgressBar staminaBar;
-    private Label loseLabel;
     private ProgressBar.ProgressBarStyle pbs;
     private Pixmap pixmap;
     private TextureRegionDrawable drawable;
-    private Sound bruh;
+
     private Sound crystalCollectSound;
     private Sound firstAidKitSound;
     private Sound jumpSound;
     private Sound whatSound;
     public static Music ost;
-    private boolean flag;
-    private float audioVolume;
+
     private TilemapActor tma;
-    private boolean goal;
-    private boolean allCollected;
-    private boolean checkCrystalsFlag;
-    private boolean zeroClimbFlag;
-    private DialogBox dialogBox;
-    private Button jumpButton;
-    private boolean sayWhat;
-    public boolean zeroStamina;
-    private Label healthLabel;
-    private boolean[] loadList;
-    public static boolean isEndLoad;
 
     public static int winWidth = Gdx.graphics.getWidth();
     public static int winHeight = Gdx.graphics.getHeight();
 
+    private DialogBox dialogBox;
+    private Button jumpButton;
     private Button runLeftButton;
     private Button runRightButton;
     private Button hitButton;
@@ -83,6 +66,13 @@ public class BaseLevelScreen extends BaseScreen {
     private Button restartButton;
     private Button menuButton;
 
+    private boolean goal;
+    private boolean checkCrystalsFlag;
+    private boolean zeroClimbFlag;
+    private boolean sayWhat;
+    public boolean zeroStamina;
+    private boolean[] loadList;
+    public static boolean isEndLoad;
     private boolean pressed1;
     private boolean pressed2;
     private boolean pressed3;
@@ -167,7 +157,7 @@ public class BaseLevelScreen extends BaseScreen {
             new FlyEnemy((float)props.get("x"), (float)props.get("y"), mainStage);
         }
 
-//      СОздание всего остального
+//      Создание всего остального
 
         healthBar = createProgressBar(Color.RED, Color.GREEN);
         staminaBar = createProgressBar(Color.GRAY, Color.BLUE);
@@ -178,7 +168,7 @@ public class BaseLevelScreen extends BaseScreen {
         buttonStyleMenu.up = new TextureRegionDrawable(buttonRegionMenu);
         menuButton = new Button(buttonStyleMenu);
         menuButton.setPosition(winWidth - 350 - winWidth*0.15f,winHeight - 20 - winHeight*0.26f );
-        menuButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        menuButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
         uiStage.addActor(menuButton);
 
 
@@ -190,7 +180,7 @@ public class BaseLevelScreen extends BaseScreen {
 
         restartButton = new Button(buttonStyleRestart);
         restartButton.setPosition(winWidth - 20 - winWidth*0.15f,winHeight - 20 - winHeight*0.26f );
-        restartButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        restartButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
         uiStage.addActor(restartButton);
 
         crystalCollectSound = LoadingLevelsScreen.assetManagerLvl.get("crystalCollectSound.mp3",Sound.class);
@@ -232,7 +222,7 @@ public class BaseLevelScreen extends BaseScreen {
 
         runLeftButton = new Button(buttonStyleRunLeft);
         runLeftButton.setPosition(20,20);
-        runLeftButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        runLeftButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
         uiStage.addActor(runLeftButton);
 
         Button.ButtonStyle buttonStyleRunRight = new Button.ButtonStyle();
@@ -241,7 +231,7 @@ public class BaseLevelScreen extends BaseScreen {
         buttonStyleRunRight.up = new TextureRegionDrawable(buttonRegionRunRight);
 
         runRightButton = new Button(buttonStyleRunRight);
-        runRightButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        runRightButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
         runRightButton.setPosition(350,20);
         uiStage.addActor(runRightButton);
 
@@ -253,7 +243,7 @@ public class BaseLevelScreen extends BaseScreen {
 
         hitButton = new Button(buttonStyleHit);
         hitButton.setPosition(winWidth - 350 - winWidth*0.15f,20);
-        hitButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        hitButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
         uiStage.addActor(hitButton);
 
 
@@ -264,7 +254,7 @@ public class BaseLevelScreen extends BaseScreen {
 
         jumpButton = new Button(buttonStyleJump);
         jumpButton.setPosition(winWidth - 20 - winWidth*0.15f,20);
-        jumpButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        jumpButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
         uiStage.addActor(jumpButton);
 
         jumpButton.addListener(new EventListener() {
@@ -289,13 +279,10 @@ public class BaseLevelScreen extends BaseScreen {
 
         climbButton = new Button(buttonStyleClimb);
         climbButton.setPosition(winWidth - 20 - winWidth*0.15f,20+150);
-        climbButton.setSize(winWidth*0.15f,winHeight*0.26f);
+        climbButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
         uiStage.addActor(climbButton);
 
 
-
-//        attackButton = new TextButton("=[==>", BaseGame.textButtonStyle);
-//        attackButton.addAction(Actions.alpha(0.4f));
 
         BaseActor goalMessage = new BaseActor(0, 0, uiStage);
         switch (goalNumber){
@@ -352,15 +339,11 @@ public class BaseLevelScreen extends BaseScreen {
                 break;
         }
 
-        audioVolume = 1;
 
-        bruh = LoadingLevelsScreen.assetManagerLvl.get("bruh1.mp3",Sound.class);
         ost = LoadingLevelsScreen.assetManagerLvl.get("ost.mp3",Music.class);
         ost.setLooping(true);
         ost.setVolume(BaseGame.prefs.getFloat("MusicVolume")/3);
         ost.play();
-        flag = true;
-        allCollected = false;
         zeroClimbFlag = false;
         sayWhat = false;
         zeroStamina = false;
@@ -376,14 +359,14 @@ public class BaseLevelScreen extends BaseScreen {
 
             if(jumpButton.isPressed()){
                 if(!pressed4){
-                    jumpButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    jumpButton.setSize(winWidth*0.15f/1.2f/1.3f,winHeight*0.26f/1.2f/1.3f);
                     jumpButton.setPosition(winWidth-20-winWidth*0.15f+18,20+18);
                     pressed4 = true;
-                    }
                 }
+            }
             else {
                 pressed4 = false;
-                jumpButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                jumpButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                 jumpButton.setPosition(winWidth - 20 - winWidth*0.15f,20);
             }
 
@@ -391,36 +374,36 @@ public class BaseLevelScreen extends BaseScreen {
                 jax.addVelocityVec(-1);
 
                 if(!pressed1){
-                    runLeftButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    runLeftButton.setSize(winWidth*0.15f/1.2f/1.3f,winHeight*0.26f/1.2f/1.3f);
                     runLeftButton.setPosition(20+18,20+18);
                     pressed1 = true;
                 }
 
                 pressed2 = false;
-                runRightButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runRightButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                 runRightButton.setPosition(350,20);
 
             } else if (runRightButton.isPressed() || Gdx.input.isKeyPressed(Input.Keys.D)) {
                 jax.addVelocityVec(1);
 
                 if(!pressed2){
-                    runRightButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    runRightButton.setSize(winWidth*0.15f/1.2f/1.3f,winHeight*0.26f/1.2f/1.3f);
                     runRightButton.setPosition(350+18,20+18);
                     pressed2 = true;
                 }
 
                 pressed1 = false;
-                runLeftButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runLeftButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                 runLeftButton.setPosition(20,20);
             } else {
                 jax.decelerateActor();
 
                 pressed2 = false;
-                runRightButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runRightButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                 runRightButton.setPosition(350,20);
 
                 pressed1 = false;
-                runLeftButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                runLeftButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                 runLeftButton.setPosition(20,20);
             }
 
@@ -429,7 +412,7 @@ public class BaseLevelScreen extends BaseScreen {
                 jax.setStamina(-1.2f);
 
                 if(!pressed3){
-                    hitButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    hitButton.setSize(winWidth*0.15f/1.2f/1.3f,winHeight*0.26f/1.2f/1.3f);
                     hitButton.setPosition(winWidth-350-winWidth*0.15f+18,20+18);
                     pressed3 = true;
                 }
@@ -440,7 +423,7 @@ public class BaseLevelScreen extends BaseScreen {
                     jax.setStamina(0.2f);
 
                     pressed3 = false;
-                    hitButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                    hitButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                     hitButton.setPosition(winWidth-350-winWidth*0.15f,20);
                 }
             }
@@ -450,7 +433,7 @@ public class BaseLevelScreen extends BaseScreen {
                 jax.climb();
 
                 if(!pressed5){
-                    climbButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
+                    climbButton.setSize(winWidth*0.15f/1.2f/1.3f,winHeight*0.26f/1.2f/1.3f);
                     climbButton.setPosition(winWidth-20-winWidth*0.15f+18,300+20+18);
                     pressed5 = true;
                 }
@@ -466,16 +449,18 @@ public class BaseLevelScreen extends BaseScreen {
 
 
                 pressed5 = false;
-                climbButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                climbButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                 climbButton.setPosition(winWidth-20-winWidth*0.15f,300+20);
             } else {
                 jax.setGravity(700);
                 zeroClimbFlag = false;
 
                 pressed5 = false;
-                climbButton.setSize(winWidth*0.15f,winHeight*0.26f);
+                climbButton.setSize(winWidth*0.15f/1.2f,winHeight*0.26f/1.2f);
                 climbButton.setPosition(winWidth-20-winWidth*0.15f,300+20);
             }
+
+
 
 
             for (BaseActor b : BaseActor.getList(mainStage, "StickEnemy")) {
@@ -591,12 +576,6 @@ public class BaseLevelScreen extends BaseScreen {
                 fl.setHitting(false);
                 if(Math.abs(jax.getX()-b.getX())<=500 && Math.abs(jax.getX()-b.getX())>=25) {
                     fl.addVelocityVec((jax.getX() - b.getX()) / (Math.abs(jax.getX() - b.getX())));
-//                    if(fl.getFlyX()!=fl.getX()){
-//                        fl.setFlyX(fl.getX());
-//                    } else {
-//                        if(fl.getX())
-//                        fl.addVelocityVecY((jax.getY() - b.getY()) / (Math.abs(jax.getY() - b.getY())));
-//                    }
                 } else{
                     fl.velocityVec.x = 0;
                 }

@@ -20,24 +20,23 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.BaseGame;
 import com.mygdx.game.Screens.BaseLevelScreen;
-import com.mygdx.game.Screens.BaseLevelScreen;
 import com.mygdx.game.Screens.LoadingLevelsScreen;
 
 import java.util.ArrayList;
 
 public class BaseActor extends Group {
     protected Animation<TextureRegion> animation;
-    private float elapsedTime;
-    private boolean animationPaused;
+
     public Vector2 velocityVec;
     protected Vector2 accelerationVec;
+
+    private Polygon boundaryPolygon;
+    private static Rectangle worldBounds;
+
+    private float elapsedTime;
     private float acceleration;
     private float maxSpeed;
     private float deceleration;
-    private Polygon boundaryPolygon;
-    private static Rectangle worldBounds;
-    protected boolean flip;
-    protected Texture texture;
     protected float walkAcceleration;
     protected float walkDeceleration;
     protected float maxHorizontalSpeed;
@@ -48,11 +47,15 @@ public class BaseActor extends Group {
     protected float health;
     protected float damage;
     protected float climbSpeed;
-    protected boolean soundPlayedFlag;
+
     protected Sound bruh;
+
+    private boolean animationPaused;
+    protected boolean flip;
     private boolean out;
     private boolean at;
     protected boolean dead;
+    protected boolean soundPlayedFlag;
 
     public BaseActor(float x, float y, Stage s){
         super();
@@ -184,52 +187,10 @@ public class BaseActor extends Group {
         return velocityVec.len();
     }
 
-    public void setMotionAngle(float angle){
-        velocityVec.setAngle(angle);
-    }
-
-    public float getMotionAngle(){
-        return velocityVec.angle();
-    }
-
-    public boolean isMoving(){
-        return(getSpeed()>0);
-    }
-
-    public void setAcceleration(float acc){
-        acceleration = acc;
-    }
-
     public void accelerateAtAngle(float angle){
         accelerationVec.add(new Vector2(acceleration, 0).setAngle(angle));
     }
 
-    public void accelerateForward(){
-        accelerateAtAngle(getRotation());
-    }
-
-    public void setMaxSpeed(float ms){
-        maxSpeed = ms;
-    }
-
-    public void setDeceleration(float dec){
-        deceleration = dec;
-    }
-
-    public void applyPhysics(float dt){
-        velocityVec.add(accelerationVec.x*dt, accelerationVec.y*dt);
-        float speed = getSpeed();
-        if(accelerationVec.len() == 0){
-            speed-=deceleration*dt;
-        }
-        speed = MathUtils.clamp(speed, 0, maxSpeed);
-
-        setSpeed(speed);
-
-        moveBy(velocityVec.x * dt, velocityVec.y*dt);
-
-        accelerationVec.set(0,0);
-    }
 
     public void setBoundaryRectangle(){
         float w = getWidth();
@@ -270,9 +231,7 @@ public class BaseActor extends Group {
     public void centerAtPosition(float x, float y){
         setPosition(x-getWidth()/2, y - getHeight()/2);
     }
-    public void centerAtActor(BaseActor other){
-        centerAtPosition(other.getX() + other.getWidth()/2, other.getY() + other.getHeight()/2);
-    }
+
     public void setOpacity(float opacity){
         this.getColor().a = opacity;
     }
@@ -320,24 +279,6 @@ public class BaseActor extends Group {
     public static void setWorldBounds(float width, float height){
         worldBounds = new Rectangle(0,0,width,height);
     }
-    public static void setWorldBounds(BaseActor ba){
-        setWorldBounds(ba.getWidth(), ba.getHeight());
-    }
-
-    public void boundToWorld(){
-        if(getX()<0){
-            setX(0);
-        }
-        if(getX() + getWidth()>worldBounds.width){
-            setX(worldBounds.width-getWidth());
-        }
-        if(getY()<0){
-            setY(0);
-        }
-        if(getY() + getHeight()>worldBounds.height){
-            setY(worldBounds.height-getHeight());
-        }
-    }
 
 //  Создание и привязка камеры к вьюпорту
 
@@ -354,20 +295,6 @@ public class BaseActor extends Group {
         cam.update();
     }
 
-    public void wrapAroundWorld(){
-        if(getX() + getWidth()<0){
-            setX(worldBounds.width);
-        }
-        if(getX() >worldBounds.width){
-            setX(-getWidth());
-        }
-        if(getY()+getHeight()<0){
-            setY(worldBounds.height);
-        }
-        if(getY()>worldBounds.height){
-            setY(-getHeight());
-        }
-    }
 
     public boolean isWithinDistance(float distance, BaseActor other){
         Polygon poly1 = this.getBoundaryPolygon();
@@ -471,13 +398,4 @@ public class BaseActor extends Group {
     public boolean isHitting(){
         return at;
     }
-
-    public void setVelocityVecX(float v){
-        velocityVec.x = v;
-    }
-    public void setVelocityVecY(float v){
-        velocityVec.y = v;
-    }
-
-
 }

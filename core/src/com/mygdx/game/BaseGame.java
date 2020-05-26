@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -44,9 +42,6 @@ public abstract class BaseGame extends Game {
 //      Создание preferences
 
         prefs = Gdx.app.getPreferences("prefs");
-        if(!prefs.contains("Exp")){
-            prefs.putInteger("Exp", 0);
-        }
         if(!prefs.contains("Health")){
             prefs.putFloat("Health", 100);
         }

@@ -50,10 +50,4 @@ public class FlyEnemy extends BaseActor {
     public void setFlyY(float t){
         flyY = t;
     }
-    public float getFlyX(){
-        return flyX;
-    }
-    public float getFlyY(){
-        return flyY;
-    }
 }

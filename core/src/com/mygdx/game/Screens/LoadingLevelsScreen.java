@@ -13,8 +13,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mygdx.game.Actors.BaseActor;
 import com.mygdx.game.Actors.TilemapActor;
 import com.mygdx.game.JaxGame;
 import com.mygdx.game.MainGameValues;
@@ -102,7 +100,6 @@ public class LoadingLevelsScreen extends BaseScreen implements Screen {
         assetManagerLvl.load("cooper.png", Texture.class);
         assetManagerLvl.load("enemyHit.png", Texture.class);
         assetManagerLvl.load("EnemySt1.png", Texture.class);
-//        assetManagerLvl.load("EnemySt2.png", Texture.class);
         assetManagerLvl.load("flag1.png", Texture.class);
         assetManagerLvl.load("flag2.png", Texture.class);
         assetManagerLvl.load("climb1.png", Texture.class);

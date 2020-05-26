@@ -34,12 +34,6 @@ public class DialogBox extends BaseActor{
     public void setFontColor(Color color){
         dialogLabel.setColor(color);
     }
-    public void setBackgroundColor(Color color){
-        this.setColor(color);
-    }
-    public void alignTopLeft(){
-        dialogLabel.setAlignment(Align.topLeft);
-    }
     public void alignCenter(){
         dialogLabel.setAlignment(Align.center);
     }

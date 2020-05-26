@@ -4,18 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.Actors.BaseActor;
-import com.mygdx.game.Actors.Solid;
 import com.mygdx.game.BaseGame;
 import com.mygdx.game.MainGameValues;
 
 public class Jax extends BaseActor{
 
-    private boolean at;
     private Animation<TextureRegion> walk;
     private Animation<TextureRegion> hit;
     private Animation<TextureRegion> jump;
@@ -40,7 +36,7 @@ public class Jax extends BaseActor{
         stand = loadAnimationFromFiles(MainGameValues.staying, 0.1f,true);
         climb = loadAnimationFromFiles(MainGameValues.climbing, 0.1f,true);
         climbStart = loadTexture("climb1.png");
-        at = false;
+
         flip = false;
         maxHorizontalSpeed = 250;
         walkAcceleration = 400;
@@ -50,16 +46,19 @@ public class Jax extends BaseActor{
         jumpSpeed = 450;
         climbSpeed = 200;
         stairsOverlap = false;
+
         setHealth(BaseGame.prefs.getFloat("Health"));
         setStamina(BaseGame.prefs.getFloat("Stamina"));
         setDamage(BaseGame.prefs.getFloat("Damage"));
 
         setBoundaryPolygon(8);
+
         belowSensor = new BaseActor(0,0,s);
         belowSensor.loadTexture("button.png");
         belowSensor.setSize(this.getWidth()-10,8);
         belowSensor.setBoundaryRectangle();
         belowSensor.setVisible(false);
+
         deathSound = Gdx.audio.newSound(Gdx.files.internal("deathSound.mp3"));
 
 
@@ -70,6 +69,7 @@ public class Jax extends BaseActor{
         super.act(dt);
 
         physicsApply(dt);
+
         health = MathUtils.clamp(health, 0, MainGameValues.jaxHealth);
         stamina = MathUtils.clamp(stamina, 0, MainGameValues.jaxStamina);
 
@@ -148,11 +148,5 @@ public class Jax extends BaseActor{
     }
     public float getStamina(){
         return stamina;
-    }
-    public void setExp(int s){
-        exp+=s;
-    }
-    public float getExp(){
-        return exp;
     }
 }

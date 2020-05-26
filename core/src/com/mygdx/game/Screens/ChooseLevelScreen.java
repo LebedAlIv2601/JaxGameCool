@@ -61,7 +61,6 @@ public class ChooseLevelScreen extends BaseScreen {
                     return false;
                 }
                 BaseGame.setActiveScreen(new MenuScreen(jg));
-//                MenuScreen.disposeOst();
                 return false;
             }
         });
@@ -90,7 +89,6 @@ public class ChooseLevelScreen extends BaseScreen {
     public void createNextButton(int i){
         final int num = i;
         lvlButtons.add(new TextButton(Integer.toString(i+1), BaseGame.textButtonStyle));
-//        lvlButtons.getLabel().setFontScale(4);
         lvlButtons.get(i).addListener(new EventListener() {
             @Override
 

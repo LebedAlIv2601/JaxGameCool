@@ -1,7 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.mygdx.game.Screens.BaseLevelScreen;
 
 import java.util.ArrayList;
@@ -32,11 +30,10 @@ public class MainGameValues {
 
     public static String[] signAnimation = {"flag1.png", "flag2.png"};
 
-    public static String[] maps = {"Level1Map1.tmx", "Level1Map.tmx", "Level2Map.tmx", "Level3Map.tmx", "Level2Map2.tmx"};
+    public static String[] maps = {"Level1Map1.tmx", "Level1Map.tmx", "Level2Map.tmx", "Level3Map.tmx"};
 
     public static String[] fire = {"Level1Map/fire1.png","Level1Map/fire2.png"};
 
-    public static ArrayList<BaseLevelScreen> lvlArray;
     public static int getGoal(int n){
         int g;
         switch (n) {

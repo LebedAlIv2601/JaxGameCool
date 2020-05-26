@@ -1,7 +1,6 @@
 package com.mygdx.game.Actors;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.Actors.BaseActor;
 
 public class Solid extends BaseActor {
     private boolean enabled;

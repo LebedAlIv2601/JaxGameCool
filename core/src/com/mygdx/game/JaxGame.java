@@ -3,10 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.Actors.TilemapActor;
-import com.mygdx.game.Screens.BaseLevelScreen;
-import com.mygdx.game.Screens.LoadingLevelsScreen;
 import com.mygdx.game.Screens.LoadingScreen;
-import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Screens.SplashScreen;
 
 public class JaxGame extends BaseGame {

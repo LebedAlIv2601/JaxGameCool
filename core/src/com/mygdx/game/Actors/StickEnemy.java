@@ -1,9 +1,7 @@
 package com.mygdx.game.Actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.Actors.BaseActor;
 import com.mygdx.game.MainGameValues;
 
 public class StickEnemy extends BaseActor {

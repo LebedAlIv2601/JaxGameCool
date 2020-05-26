@@ -79,7 +79,6 @@ public class SettingsScreen extends BaseScreen{
                     return false;
                 }
                 BaseGame.setActiveScreen(new MenuScreen(jg));
-//                MenuScreen.disposeOst();
                 return false;
             }
         });
@@ -113,23 +112,16 @@ public class SettingsScreen extends BaseScreen{
         uiTable.pad(20);
         uiTable.add(menuButton).minWidth(200).minHeight(200).top().left().colspan(1).padBottom(30);
         uiTable.add(settingsLabel).top().center().colspan(4).padBottom(30);
-//        uiTable.add().colspan(2);
-
-//        uiTable.add().expandX();
         uiTable.row();
-//        uiTable.add().colspan(1);
         uiTable.add(musicLabel).minWidth(400).top().center().colspan(5).padTop(50).padBottom(30);
         uiTable.add().colspan(2);
         uiTable.row();
-//        uiTable.add().colspan(1);
         uiTable.add(musicSlider).minWidth(400).top().center().colspan(5).padBottom(30);
         uiTable.add().colspan(2);
         uiTable.row();
-//        uiTable.add().colspan(1);
         uiTable.add(soundLabel).minWidth(400).top().center().colspan(5).padBottom(30);
         uiTable.add().colspan(2);
         uiTable.row();
-//        uiTable.add().colspan(1);
         uiTable.add(soundSlider).minWidth(400).top().center().colspan(5).padBottom(30);
         uiTable.add().colspan(2);
         uiTable.row();
